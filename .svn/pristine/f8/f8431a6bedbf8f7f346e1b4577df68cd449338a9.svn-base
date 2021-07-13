@@ -1,0 +1,267 @@
+package com.example.demo.service;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.example.demo.dto.BoardDto;
+import com.example.demo.dto.ReplyDto;
+import com.example.demo.mapper.BoardMapper;
+
+@Service
+public class BoardServiceImplement implements BoardService {
+	
+	@Autowired
+	BoardMapper boardMapper;
+	@Autowired
+	BoardPageNumbering pageNumbering;
+	
+	//변수선언
+	Map<String, Object> map = new HashMap<String, Object>();
+	
+	
+	//리스트 View
+	@Override
+	public Map<String, Object> listAll(String listPage) {
+		
+		int page = 1;    //첫 페이지 초기화
+		int limit = 10;  //1개 페이지에 노출되는 게시글 수(10개씩)
+		
+		// 매개변수 listPage 데이터가 있으면 데이터 적용
+		if (listPage != null && listPage != "") {
+			page = Integer.parseInt(listPage);
+		}
+		
+		int startRow = (page-1)*limit+1;   //선택한 페이지의 첫번째 줄 => 1, 11, 21...
+		int endRow = startRow+limit-1;   //선택한 페이지의 마지막 줄 => 10, 20, 30 ...
+
+		//DB에서 게시판 리스트 불러오기
+		List<BoardDto> list = boardMapper.selectListAll(startRow, endRow);
+		
+		//페이지 넘버링 계산
+		map = pageNumbering.pageNum(page, limit);
+		
+		//map에 담기
+		map.put("list", list);
+		
+		return map;
+	}
+	
+
+	
+	//글쓰기 처리 - DB 저장하기
+	@Override
+	public void boardWrite(BoardDto boardDto, MultipartFile file) {
+		
+		//첨부파일 처리
+		String fileName = file.getOriginalFilename();  //원본파일 이름
+		String filenameExtension = FilenameUtils.getExtension(fileName).toLowerCase();  //확장자명 가져오기
+		
+		if(filenameExtension != "") {
+			String fileUrl = "C:/workspace/ys_board_assignment/src/main/resources/static/upload/";  //파일저장위치(마지막에 반드시 슬래시(/))
+			String uploadFileName = RandomStringUtils.randomAlphanumeric(32)+"."+filenameExtension;  //신규 파일 이름 - 32자리(중복방지)
+			File f = new File(fileUrl+uploadFileName);
+			try {
+				file.transferTo(f);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			//위에서 처리한 파일이름까지 boardDto에 담아서 DB로 보낸다.
+			boardDto.setFileName(uploadFileName);
+		}else {
+			boardDto.setFileName("");  //첨부파일이 없는 경우
+		}
+		
+		//DB로 전송
+		boardMapper.insertWrite(boardDto);
+	}
+
+
+
+	//상세 페이지
+	@Override
+	public Map<String, Object> boardView(String postNum, String page, 
+			HttpServletRequest request, HttpServletResponse response) {
+		
+		//새로고침 조회수 증가 막기 처리 - 쿠키이용
+		//저장된 쿠키 불러오기
+		Cookie cookies[] = request.getCookies();
+		Map mapCookie = new HashMap<String, Object>();
+		if(request.getCookies() != null) {
+			for(int i=0; i<cookies.length; i++) {
+				Cookie obj = cookies[i];
+				mapCookie.put(obj.getName(), obj.getValue());
+			}//for
+		}//if
+		
+		//저장된 쿠키중에 read_count만 불러오기
+		String cookie_read_count = (String) mapCookie.get("read_count");
+		//저장될 새로운 쿠키값 생성
+		String new_cookie_read_count = "|" + postNum;
+		
+		//저장된 쿠키에 새로운 쿠키값이 존재하는지 검사
+		if(StringUtils.indexOfIgnoreCase(cookie_read_count, new_cookie_read_count) == -1) {
+			//없을 경우 쿠키 생성
+			Cookie cookie = new Cookie("read_count", cookie_read_count+new_cookie_read_count);
+			response.addCookie(cookie);
+			
+			//조회수 1증가 처리
+			boardMapper.updateHitNum(postNum);
+			
+		}
+		
+		
+		//상세 페이지 내용 불러오기
+		BoardDto boardDto = boardMapper.selectView(postNum);
+		
+		//이전글, 다음글 불러오기
+		BoardDto preDto = boardMapper.selectPreDto(postNum);
+		BoardDto nextDto = boardMapper.selectNextDto(postNum);
+		
+		//댓글 불러오기
+		List<ReplyDto> list = boardMapper.selectReplyAll(postNum);
+		
+		//리스트가 공백인 경우(즉, 댓글이 없는 경우) - 비어 있으면 true
+		boolean result = list.isEmpty(); 
+		
+		map.put("boardDto", boardDto);
+		map.put("preDto", preDto);
+		map.put("nextDto", nextDto);
+		map.put("postNum", postNum);
+		map.put("page", page);
+		map.put("list", list);
+		map.put("result", result);
+		return map;
+	}
+
+
+
+	//수정하기 - View 페이지
+	@Override
+	public Map<String, Object> boardModifyView(String postNum, String page) {
+		
+		BoardDto boardDto = boardMapper.selectModifyView(postNum);
+		map.put("boardDto", boardDto);
+		map.put("page", page);
+		
+		return map;
+	}
+
+
+
+	//수정하기 - DB 저장하기
+	@Override
+	public void modifyChk(BoardDto boardDto, MultipartFile file) {
+		
+		//첨부파일 처리
+		String fileName = file.getOriginalFilename();  //원본파일 이름
+		String filenameExtension = FilenameUtils.getExtension(fileName).toLowerCase();  //확장자명 가져오기
+		
+		if(filenameExtension != "") {
+			String fileUrl = "C:/workspace/ys_board_assignment/src/main/resources/static/upload/";  //파일저장위치(마지막에 반드시 슬래시(/))
+			String uploadFileName = RandomStringUtils.randomAlphanumeric(32)+"."+filenameExtension;  //신규 파일 이름 - 32자리(중복방지)
+			File f = new File(fileUrl+uploadFileName);
+			try {
+				file.transferTo(f);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			//위에서 처리한 파일이름까지 boardDto에 담아서 DB로 보낸다.
+			boardDto.setFileName(uploadFileName);
+		}
+		
+		//DB 전송
+		boardMapper.updateModify(boardDto);
+	}
+
+
+	//삭제하기
+	@Override
+	public void deleteChk(String postNum) {
+		
+		boardMapper.deleteChk(postNum);
+	}
+
+
+
+	//답변하기 - View 페이지
+	@Override
+	public BoardDto boardReplyView(String postNum) {
+		
+		BoardDto boardDto = boardMapper.selectReplyView(postNum);
+		return boardDto;
+	}
+
+
+	//답변하기 - DB 저장하기
+	@Override
+	public void replyChk(BoardDto boardDto, MultipartFile file) {
+		
+		//첨부파일 처리
+		String fileName = file.getOriginalFilename();  //원본파일 이름
+		String filenameExtension = FilenameUtils.getExtension(fileName).toLowerCase();  //확장자명 가져오기
+		
+		if(filenameExtension != "") {
+			String fileUrl = "C:/workspace/ys_board_assignment/src/main/resources/static/upload/";  //파일저장위치(마지막에 반드시 슬래시(/))
+			String uploadFileName = RandomStringUtils.randomAlphanumeric(32)+"."+filenameExtension;  //신규 파일 이름 - 32자리(중복방지)
+			File f = new File(fileUrl+uploadFileName);
+			try {
+				file.transferTo(f);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			//위에서 처리한 파일이름까지 boardDto에 담아서 DB로 보낸다.
+			boardDto.setFileName(uploadFileName);
+		}else {
+			boardDto.setFileName("");
+		}
+		
+		
+		//DB 전송
+		boardMapper.insertReply(boardDto);
+		
+		
+		//댓글 처리이므로
+		//지금 저장되는 댓글 밑에 글들은 stepNum+1 처리한다.
+		boardMapper.updateReplyPlus(boardDto);
+		
+	}
+
+
+
+	//댓글 - DB 저장하기
+	@Override
+	public void replyWrite(ReplyDto replyDto) {
+		
+		boardMapper.insertReplyWrite(replyDto);
+	}
+
+
+
+	//댓글 - 수정하기
+//	@Override
+//	public void replyModify(ReplyDto replyDto) {
+//		
+//		boardMapper.updateReplyModify(replyDto);
+//		
+//	}
+
+
+
+
+	
+	
+	
+}//class

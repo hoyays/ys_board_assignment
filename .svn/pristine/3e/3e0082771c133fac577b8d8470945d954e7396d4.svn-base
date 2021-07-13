@@ -1,0 +1,137 @@
+@charset "UTF-8";
+*{
+	margin: 0;
+	padding: 0;
+}
+#board_outline{
+	width: 900px;
+	margin: 0 auto;
+	/* border: 1px solid black; */
+}
+#title_area{
+	width: 900px;
+	margin: 0 auto;
+	margin-bottom: 20px;
+	/* border: 1px solid blue; */
+}
+#title_area h1{
+	text-align: center;
+	box-sizing: border-box;
+	margin-top: 25px;
+}
+#contents_area{
+	width: 900px;
+	margin: 0 auto;
+	/* border: 1px solid red; */
+}
+table, th, td{
+	border-collapse: collapse;
+}
+table{
+	width: 100%;
+	margin: 0 auto;
+	border: 1px solid black;
+}
+th{
+	padding: 10px 0 10px 20px;
+	border: 1px solid silver;
+	border-top: 2px solid black;
+	font-weight: bold;
+}
+td{
+	padding: 5px 0 5px 20px;
+	border: 1px solid silver;
+}
+th, td{
+	height: 30px;
+	text-align: left;
+	border-left: hidden;
+	border-right: hidden;
+	font-size: 18px;
+}
+.article{
+	padding: 20px 0 20px 20px;
+}
+.seperator{
+	padding: 0 20px 0 20px;
+	color: #e0e0e0;
+}
+.list_btn{
+	float: right;
+	width: 120px;
+	height: 50px;
+	line-height: 50px;
+	text-align: center;
+	font-weight: 800;
+	margin: 30px 15px 10px 0;
+	border: 2px solid black;
+}
+.list_btn:hover{
+	cursor: pointer;
+	font-weight: 900;
+	color: #5EC75E;
+}
+#comment_area{
+	width: 900px;
+	margin: 0 auto;
+	padding-top: 40px;
+	border: 1px solid blue;
+}
+#comment_write{
+	width: 900px;
+	/* height: 175px; */
+	margin: 0 auto;
+	margin-top: 50px;
+	padding: 15px;
+	box-sizing: border-box;
+	border: 2px solid red;
+}
+#comment_history{
+	width: 900px;
+	margin: 0 auto;
+	padding: 15px;
+	box-sizing: border-box;
+	border: 2px solid grey;
+}
+#comment_pageNum{
+	width: 300px;
+	height: 50px;
+	margin: 0 auto;
+	margin-top: 15px;
+	text-align: center;
+	border: 1px solid black;
+}
+#comment_pageNum ul{
+	list-style: none;
+}
+#comment_pageNum .page_num li{
+	width: 38px;
+	height: 36px;
+	padding-top: 5px;
+	box-sizing: border-box;
+	float: left;
+	margin-left: 20px;
+	border: 1px solid grey;
+}
+.first{
+	background: url("../../img/paging_first.png") no-repeat;
+}
+.prev{
+	background: url("../../img/paging_prev.png") no-repeat;
+}
+.next{
+	background: url("../../img/paging_next.png") no-repeat;
+}
+.last{
+	background: url("../../img/paging_last.png") no-repeat;
+}
+a:link{
+	text-decoration: none;
+	color: black;
+	font-weight: 800;
+}
+a:hover {
+	cursor: pointer;
+	font-weight: 900;
+	color: #5EC75E;
+}

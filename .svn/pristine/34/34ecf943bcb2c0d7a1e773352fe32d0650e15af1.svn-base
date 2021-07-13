@@ -1,0 +1,51 @@
+package com.example.demo.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.example.demo.dto.BoardDto;
+import com.example.demo.service.BoardService;
+
+@Controller
+public class BoardController {
+	
+	@Autowired
+	BoardService boardService;
+	
+	
+	//리스트 View
+	@RequestMapping("board/list")
+	public String boardList() {
+		return "/board/list";
+	}
+	
+	//상세 페이지 View
+	@RequestMapping("/board/view")
+	public String boardView() {
+		return "/board/view";
+	}
+	
+	//글쓰기 View
+	@RequestMapping("/board/write")
+	public String boardWrite() {
+		return "/board/write";
+	}
+	
+	//글쓰기 처리 - DB 저장
+	@RequestMapping("/writeChk")
+	public String writeChk(BoardDto boardDto, Model model) {
+		
+		int chk_num = boardService.boardWrite(boardDto);
+		
+		
+		
+		return "";
+	}
+	
+	
+	
+	
+
+}//class

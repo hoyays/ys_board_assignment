@@ -1,0 +1,51 @@
+$(document).ready(function(){
+	
+	//댓글 쓰기
+	$("#replyBtn").on("click", function(){
+		if(!$("#reContents").val()){
+			alert("내용을 입력해 주세요!");
+			$("#reContents").focus();
+			return false;
+		}
+		
+		document.replyForm.submit();
+	});
+	
+
+	
+	
+});//jQuery
+
+
+//글 삭제
+function deleteBtn(postNum, page){
+	
+	if(confirm("정말 삭제하시겠습니까?")){
+		location.href="/deleteChk?postNum="+postNum+"&page="+page;
+	}else{
+		return false;
+	}//if
+}
+
+
+
+
+//댓글 수정 View
+function modiBtn(postNum, reNum, page){
+	location.href="/commentModifyView?postNum="+postNum+"&reNum="+reNum+"&page="+page;
+}//modiBtn()
+
+
+
+
+//댓글 삭제
+function commentDeleteBtn(postNum, reNum, page){
+	if(confirm("정말 삭제하시겠습니까?")){
+		location.href="/commentDeleteChk?postNum="+postNum+"&page="+page+"&reNum="+reNum;
+	}else{
+		return false;
+	}//if
+}//deleteBtn()
+
+
+

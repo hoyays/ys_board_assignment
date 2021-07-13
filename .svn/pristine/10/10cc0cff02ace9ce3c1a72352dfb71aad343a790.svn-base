@@ -1,0 +1,14 @@
+=====> hu_member(회원가입) 테이블 <=====
+
+create table hu_member(
+user_id varchar2(20),
+user_pw varchar2(20),
+user_name varchar2(10),
+user_mobile varchar2(20),
+user_email varchar2(30)
+);
+
+==== 더미 데이터 ====
+insert into hu_member values(
+'admin', '1111', '관리자', '010-0000-0000', 'admin@huation.com'
+);

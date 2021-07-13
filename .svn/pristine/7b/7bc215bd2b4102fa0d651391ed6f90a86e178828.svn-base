@@ -1,0 +1,94 @@
+
+/*회원가입 유효성 검사*/
+function join_check(){
+	
+	//유효성 검사 시작
+	//아이디 확인
+	var idPtn = /^[a-zA-Z0-9]{3,7}$/;
+	if(idPtn.test($("#user_id").val()) != true){
+		alert("아이디는 3~7자리의 영어+숫자 조합으로 가능합니다. ");
+		$("#user_id").focus();
+		$("#user_id").val("");
+		return false;
+	}
+	
+	//비밀번호 확인
+	var pwPtn = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[~`!@#$%^&*()_\-+={}\[\]\\\|:;"\'<>,.?\/]).{5,10}$/;
+	if(pwPtn.test($("#user_pw").val()) != true){
+		alert("비밀번호는 5~10자리의 영어+숫자+특수문자 조합으로 가능합니다.");
+		$("#user_pw").focus();
+		$("#user_pw").val("");
+		$("#user_pw1").val("");
+		return false;
+	}
+	
+	//비밀번호 확인 - 공백체크
+	if(!$("#user_pw1").val()){
+		alert("비밀번호 확인을 입력해 주시기 바랍니다.");
+		$("#user_pw1").focus();
+		return false;
+	}
+	
+	//비밀번호 일치 확인
+	if($("#user_pw").val() != $("#user_pw1").val()){
+		alert("비밀번호가 일치하지 않습니다.");
+		$("#user_pw").focus();
+		$("#user_pw").val("");
+		$("#user_pw1").val("");
+		return false;
+	}
+
+	//이름 확인
+	var namePtn = /^[가-힣]{2,}$/;
+	if(namePtn.test($("#user_name").val()) != true){
+		alert("이름은 한글만 입력가능합니다.");
+		$("#user_name").focus();
+		$("#user_name").val("");
+		return false;
+	}
+	
+	//연락처 확인하기
+	var telPtn = /^\d{2,3}\-\d{3,4}\-\d{4}$/;
+	if(telPtn.test($("#user_mobile").val()) != true){
+		alert("전화번호를 형식에 맞게 입력해 주시기 바랍니다.");
+		$("#user_mobile").focus();
+		$("#user_mobile").val("");
+		return false;
+	}
+	
+	
+	//이메일 확인하기
+	var emailPtn = /^([0-9a-zA-Z_\.-]+)@([0-9a-zA-Z_-]+)(\.[0-9a-zA-Z_-]+){1,2}$/;
+	if(emailPtn.test($("#user_email").val()) != true){
+		alert("이메일 형식에 맞게 입력해 주시기 바랍니다.");
+		$("#user_email").focus();
+		$("#user_email").val("");
+		return false;
+	}
+	
+	document.joinForm.submit();
+	
+}//js-join_check()
+
+
+
+
+/*비밀번호 일치 - keyup*/
+$(document).ready(function(){
+	
+	$("#user_pw").keyup(function(){
+		$("span[name=pwEqualChk]").text("");
+	})
+	
+	$('#user_pw1').keyup(function() {
+		if ($('#user_pw').val() != $('#user_pw1').val()) {
+			$('span[name=pwEqualChk]').text('');
+			$('span[name=pwEqualChk]').html("<span id='pwEqualChk' name='pwEqualChk'>* 비밀번호가 일치하지 않습니다.</span>");
+		} else {
+			$('span[name=pwEqualChk]').text('');
+			$('span[name=pwEqualChk]').html("<span id='pwEqualChk' name='pwEqualChk'>* 비밀번호가 일치입니다.</span>");
+		}
+	}); //#user_pw1.keyup
+	
+	
+})//jQuery           

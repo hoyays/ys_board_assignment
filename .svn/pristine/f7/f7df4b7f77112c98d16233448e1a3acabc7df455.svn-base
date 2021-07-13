@@ -1,0 +1,9 @@
+package com.example.demo.service;
+
+import com.example.demo.dto.BoardDto;
+
+public interface BoardService {
+
+	int boardWrite(BoardDto boardDto);   //글쓰기 처리 - DB 저장
+
+}//interface

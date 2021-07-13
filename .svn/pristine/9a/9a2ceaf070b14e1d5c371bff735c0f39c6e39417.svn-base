@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.example.demo.mapper.MemberMapper">
+
+  <!-- 회원가입 -->
+  <insert id="insertJoin">
+		INSERT INTO hu_member
+		            (user_id,
+		             user_pw,
+		             user_name,
+		             user_mobile,
+		             user_email)
+		VALUES      ( #{user_id},
+		              #{user_pw},
+		              #{user_name},
+		              #{user_mobile},
+		              #{user_email})
+  </insert>
+  
+  <!-- 회원정보 수정 - 비밀번호 확인 -->
+  <select id="selectPwCheck" resultType="com.example.demo.dto.MemberDto">
+		SELECT user_id,
+		       user_name,
+		       user_mobile,
+		       user_email
+		FROM   hu_member
+		WHERE  user_id = #{user_id}
+		       AND user_pw = #{user_pw}
+  </select>
+  
+  <!-- 회원정보 수정 - DB 업데이트 -->
+  <update id="updateModify">
+		UPDATE hu_member
+		SET    user_pw = #{user_pw},
+		       user_mobile = #{user_mobile},
+		       user_email = #{user_email}
+		WHERE  user_id = #{user_id} 
+  </update>
+  
+  
+</mapper>

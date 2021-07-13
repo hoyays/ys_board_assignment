@@ -1,0 +1,76 @@
+@charset "UTF-8";
+*{
+	margin: 0;
+	padding: 0;
+}
+#board_outline{
+	width: 1300px;
+	height: 730px;
+	margin: 0 auto;
+	/* border: 1px solid black; */
+}
+#title_area{
+	width: 1300px;
+	height: 100px;
+	margin: 0 auto;
+	/* border: 1px solid black; */
+}
+#title_area h1{
+	margin-top: 60px;
+	text-align: center;
+	padding-left: 100px;
+}
+#contents_area{
+	width: 650px;
+	height: 460px;
+	margin: 0 auto;
+	/* border: 1px solid red; */
+}
+font{
+	color: #ed1c24;
+	font-size: 17px;
+	font-weight: 700;
+}
+table{
+	width: 600px;
+	height: 450px;
+	box-sizing: border-box;
+	text-indent: initial;
+	border-color: grey;
+	margin: 0 auto;	
+	/* border: 1px solid black; */
+}
+th td table{
+	font-size: 15px;
+	
+}
+#contents_area input{
+	width: 450px;
+	height: 44px;
+}
+input:focus::-webkit-input-placeholder {
+	color:transparent; 
+}
+#btn_area{
+	width: 315px;
+	height: 40px;
+	margin: 0 auto;
+	margin-top: 10px;
+	margin-right: 100px;
+	/* border: 1px solid blue; */
+}
+#btn_area input{
+	width: 150px;
+	color: #fff;
+	cursor: pointer;
+	font-size: 14px;
+	  
+}
+.cancel_btn{
+	background-color: #333;
+	border-color: #333;
+}
+.confirm_btn{
+	background-color: #5EC75E;
+	border-color: #5EC75E;
+}

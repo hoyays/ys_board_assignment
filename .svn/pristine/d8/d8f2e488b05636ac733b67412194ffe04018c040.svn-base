@@ -1,0 +1,127 @@
+package com.example.demo.controller;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.example.demo.dto.AjaxDto;
+import com.example.demo.service.AjaxService;
+
+@Controller
+public class AjaxController {
+	
+	@Autowired
+	AjaxService ajaxService;
+	
+	
+	//변수선언
+	Map<String, Object> map = new HashMap<String, Object>();
+	
+	
+	//리스트 View - 최초 진입시
+	@RequestMapping("/ajax/list")
+	public String ajaxMain(@Nullable String page, Model model) {
+		
+		//page = "1";  //최초 진입 시 page는 null이므로 1로 설정함
+		map = ajaxService.ajaxListAll(page);
+		map.put("page", page);
+		model.addAttribute("map", map);
+		
+		return "/ajax/list";
+	}
+	
+	
+	//페이징 기능
+	@RequestMapping("/ajax/movePg")
+	@ResponseBody
+	public Map<String, Object> ajaxNextPg(String page, Model model) {
+		
+		map = ajaxService.ajaxListAll(page);
+		map.put("page", page);
+		model.addAttribute("map", map);
+		
+		return map;
+	}
+	
+	
+
+	
+	//쓰기 - View
+	@RequestMapping("/ajax/write")
+	public String ajaxWrite(Model model) {
+		
+		AjaxDto ajaxDto = null;
+		map.put("ajaxDto", ajaxDto);
+		map.put("formAction", "/ajax/doWrite");
+		model.addAttribute("map", map);
+		
+		return "/ajax/write";
+	}
+	
+	
+	//쓰기 - DB 저장하기
+	@RequestMapping("/ajax/doWrite")
+	@ResponseBody
+	public Map<String, Object> doWrite(String user_id, String title_ajax, String contents_ajax) {
+		
+		map = ajaxService.ajaxDoWrite(user_id, title_ajax, contents_ajax);
+		return map;
+	}
+	
+	
+	//상세페이지 - View
+//	@RequestMapping("/ajax/view")
+//	public String ajaxView(String page, String postNum_ajax, 
+//			HttpServletRequest request, HttpServletResponse response, Model model) {
+//		
+//		//System.out.println("con, postNum : "+postNum_ajax);
+//		map = ajaxService.ajaxView(postNum_ajax, page, request, response);
+//		AjaxDto ajaxDto = (AjaxDto) map.get("ajaxDto");
+//		//System.out.println("db 후 : "+ajaxDto.getContents_ajax());
+//		return "/ajax/view";
+//	}
+	
+	
+	
+	//글 삭제하기
+//	@RequestMapping("/ajax/doDelete")
+//	public String doDelete(@RequestParam String postNum_ajax, 
+//			@RequestParam String page, Model model) {
+//		
+//		ajaxService.ajaxDoDelete(postNum_ajax);
+//		map.put("page", page);
+//		model.addAttribute("map", map);
+//		
+//		return "redirect:/ajax/list?page="+page;
+//	}
+	
+	
+	
+	//수정 - View
+//	@RequestMapping("/ajax/modify")
+//	public String ajaxModify(@RequestParam String postNum_ajax, 
+//			@RequestParam String page, Model model) {
+//		
+//		map = ajaxService.ajaxModify(postNum_ajax);
+//		map.put("page", page);
+//		map.put("msg", "modify");
+//		map.put("formAction", "/ajax/doModify");
+//		model.addAttribute("map", map);
+//		
+//		return "/ajax/write";
+//	}
+	
+	
+}//class

@@ -1,0 +1,15 @@
+$(document).ready(function(){
+	
+	$("#searchBtn").on("click", function(){
+		if(!$("#search").val()){
+			alert("검색어를 입력해 주세요!");
+			$("#search").focus();
+			return false;
+		}
+		
+		document.searchForm.submit();
+		
+	});
+	
+	
+})//jQuery

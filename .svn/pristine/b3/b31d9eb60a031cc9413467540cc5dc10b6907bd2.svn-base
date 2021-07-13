@@ -1,0 +1,102 @@
+=====> hu_member(회원가입) 테이블 <=====
+
+create table hu_member(
+user_id varchar2(20) primary key,
+user_pw varchar2(20),
+user_name varchar2(10),
+user_mobile varchar2(20),
+user_email varchar2(30)
+);
+
+==== 더미 데이터 ====
+insert into hu_member values(
+'admin', '1111', '관리자', '010-0000-0000', 'admin@huation.com'
+);
+
+
+
+
+
+
+
+
+
+=====> hu_board(일반게시판) 테이블 <=====
+create table hu_board(
+postNum varchar2(10) primary key,
+user_id varchar2(20) references hu_member(user_id),
+title varchar2(100),
+contents varchar2(1000),
+boardDate date default sysdate,
+fileName varchar2(50),
+groupNum varchar(10),
+indentNum varchar2(10),
+hitNum varchar2(10),
+stepNum varchar2(10)
+);
+
+==== 더미 데이터 ====
+insert into hu_board values(
+'0','admin','제목 테스트','내용 테스트',
+sysdate,'1.jpg','0','0','0','0'
+);
+
+==== 시퀀스 생성 ====
+board_seq (1~1000까지)
+
+
+****** 컬럼 추가 ****** 
+(원본파일명)
+alter table hu_board add originFileName varchar2(50);
+
+(파일 사이즈)
+alter table hu_board add fileSize varchar2(10);
+
+
+
+
+
+
+
+
+
+
+=====> hu_reply(댓글) 테이블 <=====
+create table hu_reply(
+reNum varchar2(10) primary key,
+user_id varchar2(20) references hu_member(user_id),
+postNum varchar2(10) references hu_board(postNum),
+reContents varchar2(1000),
+reDate date default sysdate,
+reGroupNum varchar2(10),
+reIndentNum varchar2(10),
+reStepNum varchar2(10),
+reSecret varchar2(1)
+);
+
+
+==== 더미 데이터 ====
+insert into hu_reply values(
+'1','aaa','1','댓글 테스트 내용입니다.',sysdate,
+'0','0','0','n'
+);
+
+
+==== 시퀀스 생성 ====
+reply_seq (1~1000까지)
+
+
+
+====== postNum 제약조건 수정 =======
+*** 1. 기존 제약 조건 삭제 ***
+alter table hu_reply
+drop constraint SYS_C007535;
+
+*** 2. 새로운 제약조건 추가 ***
+alter table hu_reply
+add constraint SYS_C007535
+foreign key(postNum)
+REFERENCES hu_board(postNum)
+on delete cascade;
+
+

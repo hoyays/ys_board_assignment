@@ -1,0 +1,35 @@
+
+//확인버튼 클릭시
+function idDoubleChk(){
+	
+	//아이디 유효성 검사
+	var idPtn = /^[a-zA-Z0-9]{3,7}$/;
+	if(idPtn.test($("#user_id").val()) != true){
+		alert("아이디는 3~7자리의 영어+숫자 조합으로 가능합니다. ");
+		$("#user_id").focus();
+		$("#user_id").val("");
+		return false;
+	}
+	document.idDoubleChkForm.submit();
+}
+
+
+//아이디 사용 클릭시
+function finalBtn(){
+	
+	//자식창 => 부모창 값 전달하기
+	$("#user_id", opener.document).val($("#user_id").val());
+	$("#idChkResult", opener.document).val($("#idChkResult").val());
+	self.close();
+}
+
+
+
+$(document).ready(function(){
+	
+	//부모창 user_id 값 => 자식창 가져오기
+	//var parentValue = window.opener.document.getElementById("user_id").value;
+	//$("#user_id").val(parentValue);
+	
+	
+});

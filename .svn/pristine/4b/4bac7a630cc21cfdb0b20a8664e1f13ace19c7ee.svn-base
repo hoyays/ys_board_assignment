@@ -1,0 +1,153 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>일반게시판</title>
+		<link rel="stylesheet" href="../css/board/boardList.css">
+		<link rel="stylesheet" href="../css/board/style.css">
+  		<link rel="stylesheet" href="../css/board/listStyle.css">
+	</head>
+	<body>
+		<c:choose>
+			<c:when test="${session_flag eq 'success'}">
+				<!-- header 추가 -->
+				<div>
+					<%@ include file="../header.jsp"%>
+				</div>
+				<div id="board_outline">
+					<div id="contents_area">
+						<section>
+							<h1>일반 게시판</h1>
+							<div class="wrapper">
+								<form action="/search" name="searchForm" method="post">
+									<select name="category" id="category">
+										<option value="0">전체</option>
+										<option value="title">제목</option>
+										<option value="content">내용</option>
+									</select>
+	
+									<div class="title">
+										<input type="text" size="16" name="search" id="search">
+									</div>
+	
+									<button type="submit">찾기</button>
+								</form>
+							</div>
+						<table>
+							<colgroup>
+								<col width="10%">
+								<col width="35%">
+								<col width="10%">
+								<col width="18%">
+								<col width="10%">
+							</colgroup>
+							<!-- 제목부분 -->
+							<tr>
+								<th>No.</th>
+								<th>제목</th>
+								<th>작성자</th>
+								<th>작성일</th>
+								<th>조회수</th>
+							</tr>
+							<!-- 내용부분 - 반복 시작 -->
+							<c:forEach var="dto" items="${map.list}">
+								<tr>
+									<td>
+										${dto.postNum}
+									</td>
+									<td class="table-title">
+										<c:forEach begin="1" end="${dto.indentNum}">
+											└─&nbsp;Re:&nbsp;
+										</c:forEach>
+										<a href="/board/view?postNum=${dto.postNum}&page=${map.page}">${dto.title}</a>
+									</td>
+									<td>
+										${dto.user_id}
+									</td>
+									<td>
+										${dto.boardDate}
+									</td>
+									<td>
+										${dto.hitNum}
+									</td>
+								</tr>
+							<!-- 내용부분 - 반복 끝 -->
+							</c:forEach>
+						</table>
+
+						<!-- 페이지 넘버링 시작 -->
+						<ul class="page-num">
+							<!-- 제일 첫 페이지로 -->
+							<a href="/board/list?page=1">
+								<li class="first"></li>
+							</a> 
+							
+							<!-- 이전 페이지 이동 -->
+							<c:choose>
+								<c:when test="${map.page <= 1}">
+									<!-- 현재 페이지가 1 이하인 경우 링크 없음 -->
+									<li class="prev"></li>
+								</c:when>
+								<c:otherwise>
+									<a href="/board/list?page=${map.page-1}">
+										<li class="prev"></li>
+									</a>
+								</c:otherwise>
+							</c:choose>
+							
+							<!-- 페이지 반복 시작 -->
+							<c:forEach var="nowPage" begin="${map.starPage}" end="${map.endPage}">
+								<c:choose>
+									<c:when test="${nowPage eq map.page}">
+										<li class="num"><div>${nowPage}</div></li>  <!-- 현재 페이지가 같으면 링크없음 -->
+									</c:when>
+									<c:when test="${nowPage > 0 && nowPage != map.page}">
+										<a href="/board/list?page=${nowPage}">
+											<li class="num"><div>${nowPage}</div></li>			
+										</a>
+									</c:when>
+										
+								</c:choose>
+							</c:forEach>
+							
+							<!-- 다음 페이지 이동 -->
+							<c:choose>
+								<c:when test="${map.page ge map.maxPage}">
+									<!-- 현재 페이지가 최대페이지 이상일 경우 링크 없음 -->
+									<li class="next"></li>
+								</c:when>
+								<c:otherwise>
+									<a href="/board/list?page=${map.page+1}">
+										<li class="next"></li>
+									</a>
+								</c:otherwise>
+							</c:choose>
+							<!-- 제일 마지막 페이지 -->							
+							<a href="/board/list?page=${map.maxPage}">
+								<li class="last"></li>
+							</a>
+							
+						</ul>
+						<div id="btn_menu">
+							<a href="/board/write"><div class="write">쓰기</div></a>
+							<div class="write">엑셀다운</div>
+							<div class="write">엑셀업</div>
+						</div>
+	
+						</section>
+					</div>
+				</div>
+			</c:when>
+			<c:otherwise>
+				<script type="text/javascript">
+					alert("로그인 후 이용가능합니다.");
+					location.href="/login";
+				</script>
+			</c:otherwise>
+		</c:choose>
+		
+	</body>
+</html>

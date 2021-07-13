@@ -1,0 +1,37 @@
+//글 삭제
+function deleteBtn(postNum, page){
+	if(confirm("정말로 삭제하시겠습니까?")){
+		location.href="/deleteChk?postNum="+postNum+"&page="+page;
+	}else{
+		return false;
+	}//if
+}
+
+
+
+/*================> 댓글 부분 <================>*/
+//댓글 수정(비밀글 X) - DB 저장하기
+function commentModifyBtn(){
+	if(!$(".reContents").val()){
+		alert("내용을 입력해 주세요!");
+		$(".reContents").focus();
+		return false;
+	}
+	
+	document.commentModify.submit();
+	
+}//commentModifyBtn()
+
+
+//댓글 수정(비밀글 O) - DB 저장하기
+function commentModifyBtn1(){
+	if(!$(".reContents1").val()){
+		alert("내용을 입력해 주세요!");
+		$(".reContents1").focus();
+		return false;
+	}
+	
+	document.commentModify1.submit();
+	
+}//commentModifyBtn()
+

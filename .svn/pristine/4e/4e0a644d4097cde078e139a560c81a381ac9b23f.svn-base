@@ -1,0 +1,14 @@
+package com.example.demo.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+public class General_board_controller {
+
+	@RequestMapping("/general_board")
+	public String general_board() {
+		return "/board/general_board";
+	}
+	
+}//class

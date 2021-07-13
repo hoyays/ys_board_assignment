@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="com.example.demo.mapper.Member_mapper">
+
+  <!-- 로그인 체크 -->
+  <select id="selectMemberLogin" resultType="com.example.demo.dto.MemberDto">
+  	 select * from hu_member where user_id=#{user_id} and user_pw=#{user_pw}
+  </select>
+  
+  <!-- 회원가입 -->
+  <insert id="insertMemberJoin">
+  	 insert into hu_member values(
+  	 #{user_id}, #{user_pw}, #{user_name}, #{user_mobile}, #{user_email})
+  </insert>
+  
+  
+  
+</mapper>

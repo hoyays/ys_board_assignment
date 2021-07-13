@@ -1,0 +1,39 @@
+@charset "UTF-8";
+*{
+	margin: 0;
+	padding: 0;
+}
+#main_outline{
+	width: 1300px;
+	height: 450px;
+	margin: 0 auto;
+	/* border: 1px solid red; */
+}
+#title_area{
+	width: 1300px;
+	height: 100px;
+	/* border: 1px solid black; */
+}
+#title_area h1{
+	margin-top: 60px;
+	text-align: center;
+}
+#contents_area{
+	width: 1300px;
+	height: 350px;
+	/* border: 1px solid blue; */
+}
+#contents_area img{
+	float: left;
+	margin-left: 100px;
+	margin-top: 60px;
+}
+#text_area{
+	float: left;
+	width: 300px;
+	height: 150px;
+	margin-top: 60px;
+	margin-left: 250px;
+	line-height: 60px;
+	/* border: 1px solid red; */
+}

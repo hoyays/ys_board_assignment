@@ -1,0 +1,14 @@
+package com.example.demo.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+public class Chard_page_controller {
+
+	@RequestMapping("/chart_page")
+	public String chart_page() {
+		return "/chart/chart_page";
+	}
+	
+}//class

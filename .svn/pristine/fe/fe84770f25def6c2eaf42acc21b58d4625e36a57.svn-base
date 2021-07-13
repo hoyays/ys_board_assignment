@@ -1,0 +1,15 @@
+$(document).ready(function(){
+	
+	$("#replyBtn").on("click", function(){
+		if(!$("#reContents").val()){
+			alert("내용을 입력해 주세요!");
+			$("#reContents").focus();
+			return false;
+		}
+		
+		document.replyForm.submit();
+		
+	});
+	
+	
+});//jQuery

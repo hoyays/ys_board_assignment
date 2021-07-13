@@ -1,0 +1,19 @@
+$(document).ready(function(){
+	
+	$("#login_btn").on("click", function(){
+		/*로그인 - ID/PW 유효성 검사*/
+	if(!$("#user_id").val()){
+		alert("아이디를 입력해 주세요!");
+		$("#user_id").focus();
+		return false;
+	}
+	if(!$("#user_pw").val()){
+		alert("비밀번호를 입력해 주세요!");
+		$("#user_pw").focus();
+		return false;
+	}
+	
+	document.form_login.submit();
+	})
+	
+})//jQuery

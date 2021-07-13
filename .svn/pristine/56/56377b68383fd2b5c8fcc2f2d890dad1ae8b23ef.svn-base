@@ -1,0 +1,24 @@
+$(document).ready(function(){
+	
+	
+	//확인 버튼 클릭 시
+	$("#confirm_btn").on("click", function(){
+		
+		//제목 확인
+		if(!$("#title").val()){
+			alert("제목을 입력해 주세요!");
+			$("#title").focus();
+			return false;
+		}
+		
+		//내용 확인
+		if(!$("#contents").val()){
+			alert("내용을 입력해 주세요!");
+			$("#contents").focus();
+			return false;
+		}
+		document.writeForm.submit();
+	});
+	
+	
+})//jQuery

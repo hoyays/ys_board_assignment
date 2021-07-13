@@ -1,0 +1,121 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+	<html>
+		<head>
+		<meta charset="UTF-8">
+		<title>Ajax 게시판 - 상세페이지</title>
+		<link rel="stylesheet" href="/css/ajax/view.css">
+		<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+		<script type="text/javascript">
+			
+			//목록 버튼 클릭 시
+			function goListBtn(){
+				opener.document.location.reload();
+				self.close();
+			}
+			
+			//삭제 버튼 클릭 시
+			function goDeleteBtn(postNum_ajax, page){
+				if(confirm("정말 삭제하시겠습니까?")){
+					location.href="./doDelete?postNum_ajax="+postNum_ajax+"&page="+page;
+					opener.document.location.reload();
+					self.close();
+				}else{
+					return false;
+				}//if
+			}
+			
+			
+			//수정 버튼 클릭 시
+			function goModifyBtn(postNum_ajax, page){
+				location.href="./modify?postNum_ajax="+postNum_ajax+"&page="+page;
+			}
+		</script>
+	</head>
+	<body>
+		<div id="board_outline">
+			<div id="title_area">
+				<h1>상세 페이지</h1>
+			</div>
+			<div id="contents_area">
+				<table>
+					<colgroup>
+						<col width="80%">
+						<col width="10%">
+						<col width="10%">
+					</colgroup>
+					<tbody>
+						<tr>
+							<th colspan="3">제목</th>
+						</tr>
+						<tr>
+							<td colspan="3"><strong>${map.ajaxDto.title_ajax}</strong></td>
+						</tr>
+						<tr>
+							<td>${map.ajaxDto.user_id}</td>
+							<td>조회수</td>
+							<td>${map.ajaxDto.hitNum_ajax}</td>
+						</tr>
+						<tr>
+							<td colspan="3" class="article">${map.ajaxDto.contents_ajax}</td>
+						</tr>
+						<tr>
+							<td colspan="3">
+								<strong>다음글</strong>
+								<span class="seperator">|</span>
+								<a href="/ajax/view?page=${map.page}&postNum_ajax=${map.nextDto.postNum_ajax}">${map.nextDto.title_ajax}</a>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="3">
+								<strong>이전글</strong>
+								<span class="seperator">|</span>
+								<a href="/ajax/view?page=${map.page}&postNum_ajax=${map.preDto.postNum_ajax}">${map.preDto.title_ajax}</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				
+				
+				<!-- 댓글 영역 -->
+				<div id="comment_area">
+					<div id="comment_write">댓글 쓰기 영역</div>
+					<div id="comment_history">댓글 히스토리</div>
+					<div id="comment_pageNum">
+						<ul class="page_num">
+							<li class="first"></li>
+							<li class="prev"></li>
+							<li class="num"><div>1</div></li>
+							<li class="next"></li>
+							<li class="last"></li>
+						</ul>
+					</div>
+				</div>
+				
+				
+				
+				<!-- 버튼 모음 -->
+				<c:choose>
+					<c:when test="${map.ajaxDto.user_id eq session_user_id}">
+						<div class="list_btn" onclick="goModifyBtn(${map.ajaxDto.postNum_ajax}, ${map.page})">수정</div>
+						<div class="list_btn" onclick="goDeleteBtn(${map.ajaxDto.postNum_ajax}, ${map.page})">삭제</div>
+						<div class="list_btn">답변달기</div>
+						<div class="list_btn" onclick="goListBtn()">목록</div>
+					</c:when>
+					<c:otherwise>
+						<div class="list_btn">답변달기</div>
+						<div class="list_btn" onclick="goListBtn()">목록</div>
+					</c:otherwise>
+				</c:choose>
+
+				
+				
+				
+				
+				
+			</div>
+		</div>
+	</body>
+</html>

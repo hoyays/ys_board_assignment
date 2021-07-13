@@ -1,0 +1,15 @@
+package com.example.demo.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+public class Contents_view_controller {
+	
+	@RequestMapping("/contents_view")
+	public String contents_view() {
+		return "/board/contents_view";
+	}
+	
+
+}//class

@@ -1,0 +1,37 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>일반게시판</title>
+  		<link rel="stylesheet" href="css/login/login.css">
+  		<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+  		<script type="text/javascript" src="js/login/login.js"></script>
+	</head>
+	<body>
+		<!-- header 추가 -->
+		<div>
+			<%@ include file="../header.jsp" %>
+		</div>
+		<div id="board_outline">
+			<div id="title_area">
+				<h1>로그인</h1>
+			</div>
+			<div id="contents_area">
+				<form action="loginCheck" name="form_login" method="post" id="login_form">
+					<input type="text" name="user_id" id="user_id" placeholder="아이디"><br>
+					<input type="password" name="user_pw" id="user_pw" placeholder="비밀번호"><br>
+					<input type="button" value="로그인" id="login_btn">
+				</form>
+			</div>
+			<div id="join_info">
+				<p>아직 회원이 아니신가요?&nbsp&nbsp<a href="/join">회원가입</a> 하러가기</p>
+			</div>
+		</div>
+		<!-- footer 추가 -->
+		<div>
+			<%@ include file="../footer.jsp" %>
+		</div>
+	</body>
+</html>

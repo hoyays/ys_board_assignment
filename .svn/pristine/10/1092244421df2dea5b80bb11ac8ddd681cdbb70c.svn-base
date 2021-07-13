@@ -1,0 +1,145 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+	<html>
+		<head>
+		<meta charset="UTF-8">
+		<title>Ajax 게시판</title>
+		<link rel="stylesheet" href="/css/ajax/write.css">
+		<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+		<script type="text/javascript" src="/js/ckeditor/ckeditor.js"></script>
+		<script type="text/javascript">
+		
+		
+			//확인버튼 클릭 시
+			function doWrite(){
+				
+				//제목 확인
+				if(!$("#title_ajax").val()){
+					alert("제목을 입력해 주세요!");
+					$("#title_ajax").focus();
+					return false;
+				}
+				
+				//내용 확인
+				if(CKEDITOR.instances.contents_ajax.getData() == '' || CKEDITOR.instances.contents_ajax.getData().length == 0){
+					alert("내용을 입력해 주세요!");
+					$("#contents_ajax").focus();
+					return false;
+				}
+				
+				
+				//ajax 실행에 필요한 변수정리
+				var contents_ajax = CKEDITOR.instances.contents_ajax.getData();
+				
+				
+				//ajax 처리하기
+				$.post(
+					"/ajax/doWrite",
+					{
+						"user_id":$("#user_id").val(),
+						"title_ajax":$("#title_ajax").val(),
+						"contents_ajax":contents_ajax
+					},
+					function(data){
+						var msg = data.msg;
+						alert(msg);
+						
+						html = "";
+						html += "<tr><td><span class='table-notice'>"+data.ajaxDto.postNum_ajax;
+						html += "</span></td><td class='table-title'><a href='/ajax/view?postNum_ajax="+data.ajaxDto.postNum_ajax+"'";
+						html +=	"'>"+data.ajaxDto.title_ajax;
+						html += "</a><td>"+data.ajaxDto.user_id+"</td></td><td>"+data.ajaxDto.date_ajax;
+						html += "</td><td>"+data.ajaxDto.hitNum_ajax;
+						html += "</td></tr>"
+						
+						$(opener.document).find("tbody[id='tbody']").prepend(html);
+						
+						self.close();
+						
+					},
+					'json'
+				);//ajax
+				
+					
+			}//doWrite()
+		
+		
+		
+			//취소버튼 클릭 시
+			function doCancel(){
+				self.close();
+			}//doCancel()
+			
+			
+		</script>
+		
+	</head>
+	<body>
+		<c:choose>
+			<c:when test="${session_flag eq 'success'}">
+				<div id="ajax_outline">
+					<div id="title_area">
+						<c:choose>
+							<c:when test="${map.msg eq 'modify'}">
+								<h1>수정하기</h1>	
+							</c:when>
+							<c:otherwise>
+								<h1>글쓰기</h1>	
+							</c:otherwise>
+						</c:choose>
+					</div>
+					<hr>
+					<div id="contents_area">
+						<form action="${map.formAction}" name="ajaxWriteForm" id="ajaxWriteForm">
+							<table>
+								<colgroup>
+									<col width="15%">
+									<col width="85%">
+								</colgroup>
+								<tbody id="tbody">
+									<tr>
+										<th>작성자</th>
+										<td>
+											${session_user_name}
+											<input type="hidden" name="user_id" id="user_id" value="${session_user_id}">
+										</td>
+									</tr>
+									<tr>
+										<th>제목</th>
+										<td>
+											<input type="text" name="title_ajax" id="title_ajax" value="${map.ajaxDto.title_ajax}">
+										</td>
+									</tr>
+									<tr>
+										<th>내용</th>
+										<td>
+											<textarea rows="10" cols="50" id="contents_ajax"></textarea>
+											<script type="text/javascript">
+												/* 내용부분 - CKeditor 연동 */
+												CKEDITOR.replace('contents_ajax', {height: 280});
+											</script>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+							<hr>
+							<div id="btn_area">
+								<input type="button" value="취소" class="cancelBtn" onclick="doCancel()">
+								<input type="button" value="확인" class="confirmBtn" onclick="doWrite()">
+							</div>				
+						</form>
+					</div>
+				</div>
+			</c:when>
+			<c:otherwise>
+				<script type="text/javascript">
+					alert("로그인 후 이용가능합니다.");
+					location.href="/login";
+				</script>
+			</c:otherwise>
+		</c:choose>
+		
+	</body>
+</html>

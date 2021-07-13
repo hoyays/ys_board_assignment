@@ -1,0 +1,13 @@
+$(document).ready(function(){
+	$("#pwChk_btn").on("click", function(){
+		if(!$("#user_pw").val()){
+			alert("비밀번호를 입력해 주시기 바랍니다.");
+			$("#user_pw").focus();
+			return false;
+		}
+		document.pw_check.submit();
+	})
+	
+	
+	
+})//jQuery

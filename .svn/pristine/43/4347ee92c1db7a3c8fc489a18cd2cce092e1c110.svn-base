@@ -1,0 +1,98 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>회원가입</title>
+  		<link rel="stylesheet" href="../css/member/join.css">
+  		<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+  		<script type="text/javascript" src="../js/member/join.js"></script>
+	</head>
+	<body>
+		<!-- header 추가 -->
+		<div>
+			<%@ include file="../header.jsp" %>
+		</div>
+		<div id="board_outline">
+			<div id="title_area">
+				<h1>회원가입</h1>
+			</div>
+			<div id="contents_area">
+				<form action="/joinCheck" method="post" name="joinForm">
+					<table>
+						<colgroup>
+							<col width="40%">
+							<col width="60%">
+						</colgroup>
+						<tr>
+							<th>
+								아이디
+								<font>*</font>
+							</th>
+							<td>
+								<input type="text" name="user_id" id="user_id" placeholder="아이디는 영어+숫자 조합 3~7자리">
+								<input type="button" name="idDouble" id="idDouble" value="아이디 중복" onclick="idDoubleChk()"><br>
+								<input type="hidden" id="idChkResult" name="idChkResult" value="default"><!-- 아이디 중복 검사 실시여부 체크 -->
+							</td>
+						</tr>
+						<tr>
+							<th>
+								비밀번호
+								<font>*</font>
+							</th>
+							<td>
+								<input type="password" name="user_pw" id="user_pw" placeholder="비밀번호는 영어+숫자+특수문자 조합 5~10자리">
+							</td>
+						</tr>
+						<tr>
+							<th>
+								비밀번호 확인
+								<font>*</font>
+							</th>
+							<td>
+								<input type="password" name="user_pw1" id="user_pw1">
+								<span id="pwEqualChk" name="pwEqualChk"></span>
+							</td>
+						</tr>
+						<tr>
+							<th>
+								이름
+								<font>*</font>
+							</th>
+							<td>
+								<input type="text" name="user_name" id="user_name" placeholder="이름은 한글만 입력가능">
+							</td>
+						</tr>					
+						<tr>
+							<th>
+								연락처
+								<font>*</font>
+							</th>
+							<td>
+								<input type="text" name="user_mobile" id="user_mobile" placeholder="예) 000-0000-0000">
+							</td>
+						</tr>
+						<tr>
+							<th>
+								이메일
+								<font>*</font>
+							</th>
+							<td>
+								<input type="text" name="user_email" id="user_email">
+							</td>
+						</tr>
+					</table>
+					<div id="btn_area">
+						<a href="../main"><input type="button" value="취소" class="cancel_btn"></a>&nbsp;
+						<input type="button" value="확인" class="confirm_btn" onclick="join_check()">
+					</div>
+				</form>
+			</div>
+		</div>
+		<!-- footer 추가 -->
+		<%-- <div>
+			<%@ include file="../footer.jsp" %>
+		</div> --%>
+	</body>
+</html>

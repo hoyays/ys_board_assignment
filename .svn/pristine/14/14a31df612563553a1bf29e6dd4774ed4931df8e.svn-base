@@ -1,0 +1,87 @@
+package com.example.demo.service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.example.demo.dto.AjaxDto;
+import com.example.demo.mapper.AjaxMapper;
+
+@Service
+public class AjaxServiceImplement implements AjaxService{
+
+	@Autowired
+	AjaxMapper ajaxMapper;
+	@Autowired
+	AjaxPageNumbering pageNumbering;
+	
+	
+	//변수선언
+	Map<String, Object> map = new HashMap<String, Object>();
+	List<AjaxDto> list = new ArrayList<AjaxDto>();
+	
+	
+	//리스트 View
+	@Override
+	public Map<String, Object> ajaxListAll(String listPage) {
+		
+		int page = 1;    //첫 페이지 초기화
+		int limit = 10;  //1개 페이지에 노출되는 게시글 수(10개씩)
+		
+		// 매개변수 listPage 데이터가 있으면 데이터 적용
+		if (listPage != null && listPage != "") {
+			page = Integer.parseInt(listPage);
+		}
+		
+		int startRow = (page-1)*limit+1;   //선택한 페이지의 첫번째 줄 => 1, 11, 21...
+		int endRow = startRow+limit-1;   //선택한 페이지의 마지막 줄 => 10, 20, 30 ...
+		
+		//DB에서 게시판 리스트 불러오기
+		list = ajaxMapper.selectListAll(startRow, endRow);
+		
+		
+		//페이지 넘버링 계산
+		map = pageNumbering.pageNum(page, limit);
+		
+		//map에 담기
+		map.put("list", list);
+		
+		return map;
+	}
+
+
+	//글쓰기
+	//====== 참고 ======
+	//1. 몰입코딩 - ajax 관련 강좌
+	//https://www.youtube.com/watch?v=lQtOF1jY1eY
+	//https://www.youtube.com/watch?v=MSyulawQ8s0
+	
+	//2. ajax 부모창 자식창 값 전달
+	//https://pjsprogram.tistory.com/8
+	
+	//3. w3school - ajax, post, get
+	//https://www.w3schools.com/jquery/jquery_ajax_get_post.asp
+
+	@Override
+	public Map<String, Object> ajaxWrite(String user_id, String title_ajax, String contents_ajax) {
+		
+		int resultChk = ajaxMapper.insertWrite(user_id, title_ajax, contents_ajax);
+		
+		String msg = "";
+		if(resultChk == 1) {
+			msg = "정상적으로 등록되었습니다.";
+		}
+		
+		//방금 저장된 튜플을 가져온다.
+		AjaxDto ajaxDto = ajaxMapper.selectListOne();
+		map.put("msg", msg);
+		map.put("ajaxDto", ajaxDto);
+		
+		return map;
+	}
+
+}//class

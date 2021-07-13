@@ -1,0 +1,151 @@
+@charset "UTF-8";
+*{
+	margin: 0;
+	padding: 0;
+}
+#board_outline{
+	width: 1300px;
+	margin: 0 auto;
+	/* border: 1px solid red; */
+}
+#title_area{
+	width: 1300px;
+	margin: 0 auto;
+	text-align: center;
+	box-sizing: border-box;
+	padding: 20px 0;
+	font-size: 20px;
+	/* border: 1px solid black; */
+}
+#search_area{
+	width: 500px;
+	height: 85px;
+	box-sizing: border-box;
+	padding: 20px 0;
+	display: inline-block;
+	/* border: 1px solid black; */	
+}
+#search_area select{
+	width: 80px;
+	height: 40px;
+	box-sizing: border-box;
+	padding: 5px;
+	font-size: 16px;
+	border: 1px solid #666666;
+}
+#search_area input{
+	width: 200px;
+	height: 38px;
+	border: 1px solid #666666;
+	display: inline-block;
+}
+#search_area button{
+	width: 40px;
+	height: 40px;
+	background: #666666;
+	border: none;
+}
+#excelUpDown{
+	width: 600px;
+	height: 85px;
+	float: right;
+	display: inline-block;
+	box-sizing: border-box;
+	/* border: 1px solid black; */
+}
+#excelUpForm input[type="file"]{
+	height: 35px;
+	font-size: 16px;
+	border: 2px black solid;
+}
+#excelUpForm input[type="button"]{
+	width: 120px;
+	height: 50px;
+	border: 2px black solid;
+	margin: 0 30px 20px 0;
+	font-size: 16px;
+	font-weight: 800;
+}
+#contents_area{
+	width: 1300px;
+	margin: 0 auto;
+	/* border: 1px solid black; */	
+}
+table{
+	width: 100%;
+	margin: 0 auto;
+	border-top: 2px solid black;
+	border-collapse: collapse;
+	/* border: 1px solid black; */
+}
+tr{
+	border: 1px solid silver;
+	border-left: hidden;
+    border-right: hidden;
+}
+th{
+	height: 70px;
+	font-weight: 900;
+	font-size: 20px;
+    border-left: hidden;
+    border-right: hidden;
+}
+td{
+	height: 50px;
+	font-size: 20px;
+	text-align: center;
+	border-left: hidden;
+    border-right: hidden;
+}
+td[class="table-title"]{
+	height: 50px;
+	font-size: 20px;
+	text-align: left;
+}
+#pageNum{
+	width: 840px;
+	height: 50px;
+	margin: 0 auto;
+	margin-top: 15px;
+	text-align: center;
+	/* border: 1px solid black; */
+}
+#pageNum ul{
+	list-style: none;
+}
+#pageNum .page-num li{
+	width: 38px;
+	height: 36px;
+	padding-top: 5px;
+	box-sizing: border-box;
+	float: left;
+	margin-left: 20px;
+	border: 1px solid grey;
+}
+.first{
+	background: url("../../img/paging_first.png") no-repeat;
+}
+.prev{
+	background: url("../../img/paging_prev.png") no-repeat;
+}
+.next{
+	background: url("../../img/paging_next.png") no-repeat;
+}
+.last{
+	background: url("../../img/paging_last.png") no-repeat;
+}
+#btn_menu{
+	float: right;
+	width: 470px;
+	/* border: 1px solid blue; */
+}
+.write{
+	float: right;
+	width: 120px;
+	height: 50px;
+	line-height: 50px;
+	margin: 20px 0 50px 0;
+	border: 2px solid black;
+	font-size: 16px;
+	text-align: center;
+}

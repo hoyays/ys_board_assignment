@@ -1,0 +1,9 @@
+package com.example.demo.service;
+
+import com.example.demo.dto.MemberDto;
+
+public interface Member_joinService {
+
+	int joinCheck(MemberDto memberDto);   //회원가입
+
+}//interface

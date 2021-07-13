@@ -1,0 +1,25 @@
+$(document).ready(function(){
+	
+	
+	//답변 버튼 클릭 시
+	$("#reply_btn").on("click", function(){
+		
+		//제목 확인
+		if(!$("#title").val()){
+			alert("제목을 입력해 주세요!");
+			$("#title").focus();
+			return false;
+		}
+		
+		//내용 확인
+		if(CKEDITOR.instances.contents.getData() == '' || CKEDITOR.instances.contents.getData().length == 0){
+			alert("내용을 입력해 주세요!");
+			$("#contents").focus();
+			return false;
+		}
+		
+		document.replyForm.submit();
+	});
+	
+	
+})//jQuery

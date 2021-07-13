@@ -1,0 +1,37 @@
+package com.example.demo.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.example.demo.dto.MemberDto;
+import com.example.demo.service.Member_joinService;
+
+@Controller
+public class Member_join_controller {
+	
+	@Autowired
+	Member_joinService member_joinService;
+
+	@RequestMapping("/member_join")
+	public String member_join() {
+		return "/member_join/member_join";
+	}
+	
+	/* 회원가입 처리하기 */
+	@RequestMapping("/join_check")
+	public String join_check(MemberDto memberDto, Model model) {
+		
+		int check = member_joinService.joinCheck(memberDto);
+		model.addAttribute("check", check);
+		
+		return "/member_join/joinComplete";
+	}
+	
+	@RequestMapping("/joinComplete")
+	public String joinComplete() {
+		return "/member_join/joinComplete";
+	}
+	
+}//class
