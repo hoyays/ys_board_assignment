@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.example.demo.dto.AjaxCommentDto;
 import com.example.demo.dto.AjaxDto;
 import com.example.demo.service.AjaxService;
 
@@ -40,7 +41,7 @@ public class AjaxController {
 	
 	//전체 리스트 - DB에서 데이터 불러오기
 	//검색결과 리스트
-	@RequestMapping("/ajax/DoList")
+	@RequestMapping("/ajax/doList")
 	@ResponseBody
 	public Map<String, Object> ajaxDoList(@Nullable String page, 
 			@Nullable String category, @Nullable String search) {
@@ -104,14 +105,16 @@ public class AjaxController {
 	
 	
 	//상세 페이지 - DB에서 데이터 불러오기
-	@RequestMapping("/ajax/DoView")
+	@RequestMapping("/ajax/doView")
 	@ResponseBody
 	public Map<String, Object> ajaxDoView(String postNum_ajax, 
 			HttpServletRequest request, HttpServletResponse response){
 		
+		//세션값 확인하기
 		HttpSession session = request.getSession();
 		String session_user_id = (String) session.getAttribute("session_user_id");
 		
+		//상세 페이지 내용 불러오기
 		map = ajaxService.ajaxDoView(postNum_ajax, request, response);
 		map.put("session_user_id", session_user_id);
 		return map;
@@ -132,11 +135,11 @@ public class AjaxController {
 	
 	
 	//수정 - View 데이터 가져오기
-	@RequestMapping("/ajax/modifyView")
+	@RequestMapping("/ajax/modify")
 	@ResponseBody
-	public Map<String, Object> ajaxmodifyView(String postNum_ajax, String page) {
+	public Map<String, Object> ajaxModify(String postNum_ajax, String page) {
 		
-		map = ajaxService.ajaxModifyView(postNum_ajax, page);
+		map = ajaxService.ajaxModify(postNum_ajax, page);
 		return map;
 	}
 	
@@ -173,6 +176,41 @@ public class AjaxController {
 	
 	
 	
+	//댓글쓰기 - DB 저장하기
+	@RequestMapping("/ajax/doComWrite")
+	@ResponseBody
+	public Map<String, Object> ajaxDoComWrite(AjaxCommentDto ajaxCommentDto, String page){
+		
+		
+		if(ajaxCommentDto.getComSecret_ajax() == null || ajaxCommentDto.getComSecret_ajax().equals("")) {
+			ajaxCommentDto.setComSecret_ajax("n");
+		}
+		
+		map = ajaxService.ajaxDoComWrite(ajaxCommentDto, page);
+		return map;
+	}
+	
+	
+	
+	//댓글 삭제하기
+	@RequestMapping("/ajax/doComDelete")
+	@ResponseBody
+	public Map<String, Object> ajaxDoComDelete(String comNum_ajax, String postNum_ajax){
+		
+		map = ajaxService.ajaxDoComDelete(comNum_ajax, postNum_ajax);
+		return map;
+	}
+	
+	
+	
+	//댓글 수정하기 View
+	@RequestMapping("/ajax/comModify")
+	@ResponseBody
+	public Map<String, Object> ajaxComModify(String comNum_ajax, String postNum_ajax){
+		
+		map = ajaxService.ajaxComModify(comNum_ajax, postNum_ajax);
+		return map;
+	}
 	
 	
 	

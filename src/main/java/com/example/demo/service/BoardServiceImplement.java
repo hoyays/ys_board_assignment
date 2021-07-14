@@ -69,12 +69,15 @@ public class BoardServiceImplement implements BoardService {
 		List<BoardDto> list = new ArrayList<BoardDto>();
 		list = boardMapper.selectListAll(startRow, endRow, search, category);
 		
-
+		//검색결과 list가 공백인 경우 - 비어 있으면 true
+		boolean searchResult = list.isEmpty();
+		
 		//페이지 넘버링 계산
 		map = pageNumbering.pageNum(page, limit, category, search);
 		
 		//map에 담기
 		map.put("list", list);
+		map.put("searchResult", searchResult);
 		
 		return map;
 	}

@@ -91,36 +91,48 @@
 								<th>조회수</th>
 							</tr>
 							<!-- 내용부분 - 반복 시작 -->
-							<c:forEach var="dto" items="${map.list}">
-								<tr>
-									<td>
-										${dto.postNum}
-									</td>
-									<td class="table-title">
-										<c:forEach begin="1" end="${dto.indentNum}">
-											└─&nbsp;Re:&nbsp;
-										</c:forEach>
-										<a href="/board/view?postNum=${dto.postNum}&page=${map.page}&search=${map.search}&category=${map.category}">
-											${dto.title}&nbsp;
-											<c:choose>
-												<c:when test="${dto.reCnt ne 0 }">
-													<font color="red"><strong>[${dto.reCnt}]</strong></font>	
-												</c:when>
-											</c:choose>
-										</a>
-									</td>
-									<td>
-										${dto.user_id}
-									</td>
-									<td>
-										${dto.boardDate}
-									</td>
-									<td>
-										${dto.hitNum}
-									</td>
-								</tr>
-							<!-- 내용부분 - 반복 끝 -->
-							</c:forEach>
+							<c:choose>
+								<c:when test="${map.searchResult eq false}">
+									<!-- 검색 결과가 있을 경우 -->
+									<c:forEach var="dto" items="${map.list}">
+										<tr>
+											<td>
+												${dto.postNum}
+											</td>
+											<td class="table-title">
+												<c:forEach begin="1" end="${dto.indentNum}">
+													└─&nbsp;Re:&nbsp;
+												</c:forEach>
+												<a href="/board/view?postNum=${dto.postNum}&page=${map.page}&search=${map.search}&category=${map.category}">
+													${dto.title}&nbsp;
+													<c:choose>
+														<c:when test="${dto.reCnt ne 0 }">
+															<font color="red"><strong>[${dto.reCnt}]</strong></font>	
+														</c:when>
+													</c:choose>
+												</a>
+											</td>
+											<td>
+												${dto.user_id}
+											</td>
+											<td>
+												${dto.boardDate}
+											</td>
+											<td>
+												${dto.hitNum}
+											</td>
+										</tr>
+									<!-- 내용부분 - 반복 끝 -->
+									</c:forEach>
+								</c:when>
+								<c:otherwise>
+									<!-- 검색결과가 없는 경우 -->
+									<tr>
+										<td colspan="5">'${map.search}'에 대한 검색결과가 없습니다.</td>
+									</tr>
+								</c:otherwise>
+							</c:choose>
+							
 						</table>
 						
 						

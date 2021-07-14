@@ -22,15 +22,18 @@
   			function listView(){
   				
   				$.post(
-  					"/ajax/DoList",		
+  					"/ajax/doList",		
   					{
-  						/* 검색기능 이후 변수값 확인 필요 */
+  						"page":$("#page").val(),
+  						"category":$("#category").val(),
+  						"search":$("#search").val()
   						
   					},
   					function(data){
   						$("#page").val(data.page);
 						$("#maxPage").val(data.maxPage);
 						$("#dataCnt").text(data.listCount);
+						
 						
 						//list 데이터
 						html = "";
@@ -45,8 +48,14 @@
 							}
 							
 							html += "<a href='javascript:void(0)'";
-							html += " onclick='showView("+data.list[i].postNum_ajax+", "+data.page+")' id='showView'>"+data.list[i].title_ajax;
-							html += "</a></td><td>"+data.list[i].user_id+"</td>";
+							html += " onclick='showView("+data.list[i].postNum_ajax+", "+data.page+")' id='showView'>"+data.list[i].title_ajax+"</a>";
+							
+							
+							if(data.list[i].comCnt != 0){
+								html += "&nbsp;<font color='red'><strong>["+data.list[i].comCnt+"]</strong></font>";	
+							}
+							
+							html += "</td><td>"+data.list[i].user_id+"</td>";
 							html += "<td>"+data.list[i].date_ajax+"</td><td>"+data.list[i].hitNum_ajax+"</td></tr>";
 							$("#tbody").html(html);
 						}//for
@@ -78,7 +87,9 @@
 				$.post(
 					"/ajax/movePg",
 					{
-						"page":page
+						"page":page,
+						"category":$("#category").val(),
+  						"search":$("#search").val()
 					},
 					function(data){
 						$("#page").val(data.page);
@@ -97,8 +108,14 @@
 							}
 							
 							html += "<a href='javascript:void(0)'";
-							html += " onclick='showView("+data.list[i].postNum_ajax+", "+data.page+")' id='showView'>"+data.list[i].title_ajax;
-							html += "</a></td><td>"+data.list[i].user_id+"</td>";
+							html += " onclick='showView("+data.list[i].postNum_ajax+", "+data.page+")' id='showView'>"+data.list[i].title_ajax+"</a>";
+							
+							
+							if(data.list[i].comCnt != 0){
+								html += "&nbsp;<font color='red'><strong>["+data.list[i].comCnt+"]</strong></font>";	
+							}
+							
+							html += "</td><td>"+data.list[i].user_id+"</td>";
 							html += "<td>"+data.list[i].date_ajax+"</td><td>"+data.list[i].hitNum_ajax+"</td></tr>";
 							$("#tbody").html(html);
 						}//for
@@ -118,12 +135,19 @@
 		  	
 		  	//페이지 이동 - 이전페이지
 		  	function prePgBtn(page){
+		  		
 		  		var prePage = page-1;
+		  		if(prePage <= 0){
+		  			prePage = 1;
+		  		}
+		  		
 		  		
 		  		$.post(
 		  			"/ajax/movePg",
 		  			{
-		  				"page":prePage
+		  				"page":prePage,
+		  				"category":$("#category").val(),
+  						"search":$("#search").val()
 		  			},
 		  			function(data){
 						$("#page").val(data.page);
@@ -142,8 +166,14 @@
 							}
 							
 							html += "<a href='javascript:void(0)'";
-							html += " onclick='showView("+data.list[i].postNum_ajax+", "+data.page+")' id='showView'>"+data.list[i].title_ajax;
-							html += "</a></td><td>"+data.list[i].user_id+"</td>";
+							html += " onclick='showView("+data.list[i].postNum_ajax+", "+data.page+")' id='showView'>"+data.list[i].title_ajax+"</a>";
+							
+							
+							if(data.list[i].comCnt != 0){
+								html += "&nbsp;<font color='red'><strong>["+data.list[i].comCnt+"]</strong></font>";	
+							}
+							
+							html += "</td><td>"+data.list[i].user_id+"</td>";
 							html += "<td>"+data.list[i].date_ajax+"</td><td>"+data.list[i].hitNum_ajax+"</td></tr>";
 							$("#tbody").html(html);
 						}//for
@@ -173,7 +203,9 @@
 		  		$.post(
 		  			"/ajax/movePg",
 		  			{
-		  				"page":nextPage
+		  				"page":nextPage,
+		  				"category":$("#category").val(),
+  						"search":$("#search").val()
 		  			},
 		  			function(data){
 						$("#page").val(data.page);
@@ -193,8 +225,14 @@
 							}
 							
 							html += "<a href='javascript:void(0)'";
-							html += " onclick='showView("+data.list[i].postNum_ajax+", "+data.page+")' id='showView'>"+data.list[i].title_ajax;
-							html += "</a></td><td>"+data.list[i].user_id+"</td>";
+							html += " onclick='showView("+data.list[i].postNum_ajax+", "+data.page+")' id='showView'>"+data.list[i].title_ajax+"</a>";
+							
+							
+							if(data.list[i].comCnt != 0){
+								html += "&nbsp;<font color='red'><strong>["+data.list[i].comCnt+"]</strong></font>";	
+							}
+							
+							html += "</td><td>"+data.list[i].user_id+"</td>";
 							html += "<td>"+data.list[i].date_ajax+"</td><td>"+data.list[i].hitNum_ajax+"</td></tr>";
 							$("#tbody").html(html);
 						}//for
@@ -246,12 +284,11 @@
   			
   			//검색기능
   			function doSearch(page){
-  				alert("검색버튼을 클림함");
   				var category = $("#category").val();
   				var search = $("#search").val();
   				
   				$.post(
-  					'/ajax/DoList',
+  					'/ajax/doList',
   					{
   						"category":category,
   						"search":search,
@@ -265,36 +302,47 @@
 						console.log(data);
 						
 						
-						
-						//검색결과 list
-						html = "";
-						for(var i=0; i<data.list.length; i++){
-							
-							html += "<tr><td><span class='table-notice'>"+data.list[i].postNum_ajax;
-							html += "</span></td><td class='table-title'>";
-							
-							if(data.list[i].indentNum_ajax != 0){
-								for(var j=0; j<data.list[i].indentNum_ajax; j++){
-									html += "└─&nbsp;Re:&nbsp;";
+						//검색결과 있을 떄
+						if(data.result == false){
+							//list 데이터
+							html = "";
+							for(var i=0; i<data.list.length; i++){
+								html += "<tr><td><span class='table-notice'>"+data.list[i].postNum_ajax;
+								html += "</span></td><td class='table-title'>";
+								
+								if(data.list[i].indentNum_ajax != 0){
+									for(var j=0; j<data.list[i].indentNum_ajax; j++){
+										html += "└─&nbsp;Re:&nbsp;";
+									}
 								}
-							}
+								
+								html += "<a href='javascript:void(0)'";
+								html += " onclick='showView("+data.list[i].postNum_ajax+", "+data.page+")' id='showView'>"+data.list[i].title_ajax+"</a>";
+								
+								
+								if(data.list[i].comCnt != 0){
+									html += "&nbsp;<font color='red'><strong>["+data.list[i].comCnt+"]</strong></font>";	
+								}
+								
+								html += "</td><td>"+data.list[i].user_id+"</td>";
+								html += "<td>"+data.list[i].date_ajax+"</td><td>"+data.list[i].hitNum_ajax+"</td></tr>";
+								$("#tbody").html(html);
+							}//for
 							
-							html += "<a href='javascript:void(0)'";
-							html += " onclick='showView("+data.list[i].postNum_ajax+", "+data.page+")' id='showView'>"+data.list[i].title_ajax;
-							html += "</a></td><td>"+data.list[i].user_id+"</td>";
-							html += "<td>"+data.list[i].date_ajax+"</td><td>"+data.list[i].hitNum_ajax+"</td></tr>";
+							
+							//페이지 넘버링
+							htmlPg = "";
+							for(var i=data.startPage; i<=data.endPage; i++){
+								htmlPg += "<li class='num' onclick='movePgBtn("+i+")'><div>"+i+"</div></li>";
+							}//for
+							$("#pageNum_area").show();
+							$("#pageNum").html(htmlPg);
+						}else if(data.result == true){
+							html = "";
+							html += "<tr><td colspan='5' id='noSearchResult'>'"+search+"'에 대한 검색결과가 없습니다.</td></tr>";
 							$("#tbody").html(html);
-							
-						}//for
-						
-						
-						//페이지 넘버링
-						htmlPg = "";
-						for(var i=data.startPage; i<=data.endPage; i++){
-							htmlPg += "<li class='num' onclick='movePgBtn("+i+")'><div>"+i+"</div></li>";
-						}//for
-						$("#pageNum").html(htmlPg);
-						
+							$("#pageNum_area").hide();
+						}//if
   					},
   					'json'
   				);//ajax
@@ -310,7 +358,6 @@
 	<!-- 필요한 변수값 저장하기 -->
 	<input type="hidden" name="page" id="page" value="">
 	<input type="hidden" name="maxPage" id="maxPage" value="">
-	<input type="hidden" name="addReply" id="addReply" value="└─Re:">
 		<c:choose>
 			<c:when test="${session_flag eq 'success'}">
 				 <!-- header 추가 -->

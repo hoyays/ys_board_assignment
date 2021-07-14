@@ -34,14 +34,13 @@
 				var page = getParameterByName('page');
 				var msg = getParameterByName('msg');
 				
-				//ajaxDto가 null이면 쓰기
+				//msg가 없으면 쓰기
 				//msg가 modify이면 수정
 				if(msg == 'modify'){
 					
-					//alert("수정버튼 클릭하여 들어옴");
 					
 					$.post(
-						'/ajax/modifyView',
+						'/ajax/modify',
 						{
 							"postNum_ajax":postNum_ajax,
 							"page":page
@@ -54,7 +53,6 @@
 						},
 						'json'
 					);//ajax
-					
 					
 				//msg가 reply이면 답변	
 				}else if(msg == 'reply'){
@@ -124,15 +122,7 @@
 							
 							$("#page").val(data.page);
 							$(opener.document).find("#dataCnt").text(data.listCount);
-							/* html = "";
-							for(i=0; i<data.list.length; i++){
-								html += "<tr><td><span class='table-notice'>"+data.list[i].postNum_ajax;
-								html += "</span></td><td class='table-title'><a href='javascript:void(0)'";
-								html += " onclick='showView("+data.list[i].postNum_ajax+", "+data.page+")' id='showView'>"+data.list[i].title_ajax;
-								html += "</a></td><td>"+data.list[i].user_id+"</td>";
-								html += "<td>"+data.list[i].date_ajax+"</td><td>"+data.list[i].hitNum_ajax+"</td></tr>";
-								$(opener.document).find("tbody[id='tbody']").html(html);
-							}//for */
+							
 							
 							//list 데이터
 							html = "";
@@ -147,9 +137,16 @@
 								}
 								
 								html += "<a href='javascript:void(0)'";
-								html += " onclick='showView("+data.list[i].postNum_ajax+", "+data.page+")' id='showView'>"+data.list[i].title_ajax;
-								html += "</a></td><td>"+data.list[i].user_id+"</td>";
+								html += " onclick='showView("+data.list[i].postNum_ajax+", "+data.page+")' id='showView'>"+data.list[i].title_ajax+"</a>";
+								
+								
+								if(data.list[i].comCnt != 0){
+									html += "&nbsp;<font color='red'><strong>["+data.list[i].comCnt+"]</strong></font>";	
+								}
+								
+								html += "</td><td>"+data.list[i].user_id+"</td>";
 								html += "<td>"+data.list[i].date_ajax+"</td><td>"+data.list[i].hitNum_ajax+"</td></tr>";
+								
 								$(opener.document).find("tbody[id='tbody']").html(html);
 							}//for
 							

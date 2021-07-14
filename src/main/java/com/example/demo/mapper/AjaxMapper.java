@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.example.demo.dto.AjaxCommentDto;
 import com.example.demo.dto.AjaxDto;
 
 @Mapper
@@ -20,6 +21,10 @@ public interface AjaxMapper {
 			String indentNum_ajax, String stepNum_ajax);  //답변하기
 	AjaxDto selectReplyView(String groupNum_ajax);   //입력된 답변내용 불러오기
 	void updateReplyPlus(String groupNum_ajax, String stepNum_ajax);  //답변하기 - 현재 댓글 아래 stepNum+1 처리
+	List<AjaxCommentDto> selectCommentListAll(String postNum_ajax);   //댓글 내용 불러오기
+	void insertComWrite(AjaxCommentDto ajaxCommentDto);  //댓글쓰기 - DB 저장하기
+	int deleteComment(String comNum_ajax);   //댓글 삭제하기
+	AjaxCommentDto selectComment(String comNum_ajax, String postNum_ajax);  //댓글 수정 View
 	
 	
 	

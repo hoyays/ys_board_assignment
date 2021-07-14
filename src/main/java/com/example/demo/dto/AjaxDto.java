@@ -18,5 +18,6 @@ public class AjaxDto {
 	private int indentNum_ajax;
 	private int stepNum_ajax;
 	private int hitNum_ajax;
+	private int comCnt;
 	
 }//class

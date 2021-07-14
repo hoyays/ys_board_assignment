@@ -61,7 +61,7 @@ alter table hu_board add fileSize varchar2(10);
 
 
 
-=====> hu_reply(댓글) 테이블 <=====
+=====> hu_reply(일반게시판, 댓글) 테이블 <=====
 create table hu_reply(
 reNum varchar2(10) primary key,
 user_id varchar2(20) references hu_member(user_id),
@@ -132,4 +132,35 @@ ajax_seq.nextval, ajax_seq.currval, 0, 0, 0
 
 ==== 시퀀스 생성 ====
 ajax_seq (1~1000까지)
+
+
+
+
+
+
+
+
+=====> hu_ajax_comment(ajax 게시판, 댓글) 테이블 <=====
+create table hu_ajax_comment(
+comNum_ajax number(4) primary key,
+user_id varchar2(20) REFERENCES hu_member(user_id),
+comContents_ajax varchar2(1000),
+comDate_ajax date default sysdate,
+comGroupNum_ajax number(4),
+comIndentNum_ajax number(4),
+comStepNum_ajax number(4),
+comSecret_ajax varchar2(1),
+postNum_ajax number(4) REFERENCES hu_ajax(postNum_ajax) on delete cascade
+);
+
+
+==== 더미 데이터 ====
+insert into hu_ajax_comment values(
+comment_seq.nextval, 'aaa', '댓글 테스트입니다.',
+sysdate, comment_seq.currval, 0, 0, 'n', 193);
+
+
+==== 시퀀스 생성 ====
+comment_seq (1~1000까지)
+
 

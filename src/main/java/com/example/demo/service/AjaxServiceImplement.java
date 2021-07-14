@@ -13,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.dto.AjaxCommentDto;
 import com.example.demo.dto.AjaxDto;
 import com.example.demo.mapper.AjaxMapper;
 
@@ -46,8 +47,13 @@ public class AjaxServiceImplement implements AjaxService{
 		//페이지 넘버링 계산
 		map = pageNumbering.pageNum(page, limit, category, search);
 		
+		//리스트가 공백인 경우(즉, 댓글이 없는 경우) - 비어 있으면 true
+		boolean result = list.isEmpty(); 
+		
+		
 		//map에 담기
 		map.put("list", list);
+		map.put("result", result);
 		
 		return map;
 	}
@@ -130,8 +136,19 @@ public class AjaxServiceImplement implements AjaxService{
 		//상세 페이지 내용 불러오기
 		AjaxDto ajaxDto = ajaxMapper.selectView(postNum_ajax);
 		
+		
+		//댓글 내용 불러오기
+		List<AjaxCommentDto> comList = ajaxMapper.selectCommentListAll(postNum_ajax);
+		
+		
+		//리스트가 공백인 경우(즉, 댓글이 없는 경우) - 비어 있으면 true
+		boolean result = comList.isEmpty(); 
+		
+		
 		//map에 담기
 		map.put("ajaxDto", ajaxDto);
+		map.put("comList", comList);
+		map.put("result", result);
 		
 		return map;
 	}
@@ -173,7 +190,7 @@ public class AjaxServiceImplement implements AjaxService{
 	
 	//글 수정하기 View
 	@Override
-	public Map<String, Object> ajaxModifyView(String postNum_ajax, String page) {
+	public Map<String, Object> ajaxModify(String postNum_ajax, String page) {
 		
 		AjaxDto ajaxDto = ajaxMapper.selectView(postNum_ajax);
 		map.put("ajaxDto", ajaxDto);
@@ -237,6 +254,79 @@ public class AjaxServiceImplement implements AjaxService{
 		map.put("msg", msg);
 		map.put("ajaxDto", ajaxDto);
 		
+		
+		return map;
+	}
+
+
+	
+	//댓글쓰기 - DB 저장하기
+	@Override
+	public Map<String, Object> ajaxDoComWrite(AjaxCommentDto ajaxCommentDto, String page) {
+		
+		//댓글 저장하기
+		ajaxMapper.insertComWrite(ajaxCommentDto);
+		
+		//댓글 리스트 불러오기(방금 저장된 것까지 포함하여)
+		String postNum_ajax = ajaxCommentDto.getPostNum_ajax()+"";
+		List<AjaxCommentDto> comList = ajaxMapper.selectCommentListAll(postNum_ajax);
+		
+		//리스트가 공백인 경우(즉, 댓글이 없는 경우) - 비어 있으면 true
+		boolean result = comList.isEmpty(); 
+		
+		//map에 담기
+		map.put("page", page);
+		map.put("comList", comList);
+		map.put("result", result);
+		
+		return map;
+	}
+
+
+	
+	//댓글 삭제하기
+	@Override
+	public Map<String, Object> ajaxDoComDelete(String comNum_ajax, String postNum_ajax) {
+		
+		int resultChk = ajaxMapper.deleteComment(comNum_ajax);
+		
+		String msg = "";
+		if(resultChk == 1) {
+			msg = "정상적으로 삭제되었습니다.";
+		}
+		
+		//댓글 리스트 불러오기(방금 삭제된 결과 반영하여)
+		List<AjaxCommentDto> comList = ajaxMapper.selectCommentListAll(postNum_ajax);
+		
+		//리스트가 공백인 경우(즉, 댓글이 없는 경우) - 비어 있으면 true
+		boolean result = comList.isEmpty(); 
+		
+		//map에 담기
+		map.put("comList", comList);
+		map.put("result", result);
+		map.put("msg", msg);
+		
+		return map;
+	}
+
+
+	
+	//댓글 수정 View
+	@Override
+	public Map<String, Object> ajaxComModify(String comNum_ajax, String postNum_ajax) {
+		
+		AjaxCommentDto ajaxCommentDto = ajaxMapper.selectComment(comNum_ajax, postNum_ajax);
+		
+		//댓글 리스트 불러오기
+		List<AjaxCommentDto> comList = ajaxMapper.selectCommentListAll(postNum_ajax);
+		
+		//리스트가 공백인 경우(즉, 댓글이 없는 경우) - 비어 있으면 true
+		boolean result = comList.isEmpty();
+		
+		//map에 담기
+		map.put("ajaxCommentDto", ajaxCommentDto);
+		map.put("comList", comList);
+		map.put("result", result);
 		
 		return map;
 	}

@@ -34,7 +34,7 @@
 				var page = getParameterByName('page');
 				
 				$.post(
-					'/ajax/DoView',
+					'/ajax/doView',
 					{
 						"postNum_ajax":postNum_ajax
 					},
@@ -58,6 +58,59 @@
 						html += "<td>"+data.ajaxDto.hitNum_ajax+"</td></tr><tr>";
 						html += "<td colspan='3' class='article'>"+data.ajaxDto.contents_ajax+"</td></tr>";
 						$("#tbody").html(html);
+						
+
+						
+						//댓글 히스토리
+						comHtml = "";
+						
+						//댓글이 있는 경우
+						if(data.result == false){
+							
+							for(var i=0; i<data.comList.length; i++){
+								
+								//비밀글 설정 N
+								if(data.comList[i].comSecret_ajax == 'n'){
+									comHtml += "<div id='comNum_"+data.comList[i].comNum_ajax+"'><div id='commentBlock'><strong>"+data.comList[i].user_id+"</strong>&nbsp;&nbsp;";
+									if(data.comList[i].user_id == data.session_user_id){
+										comHtml += "<input type='button' value='수정' id='goComModify' onclick='goComModifyBtn("+data.comList[i].comNum_ajax+")'>&nbsp;";
+										comHtml += "<input type='button' value='삭제' id='goComDelete' onclick='goComDeleteBtn("+data.comList[i].comNum_ajax+")'>&nbsp;";
+									}
+									comHtml += "<span>"+data.comList[i].comDate_ajax+"</span>";
+									comHtml += "<div class='commentDetail'>"+data.comList[i].comContents_ajax+"</div><br><hr><br></div></div>";
+									
+								//비밀글 설정 Y	
+								}else {
+									
+									//원글작성자 or 댓글 작성자인 경우 ==> 비밀글 내용 보여주기
+									if(data.comList[i].user_id == data.session_user_id || data.ajaxDto.user_id == data.session_user_id){
+										comHtml += "<div id='comNum_"+data.comList[i].comNum_ajax+"'><div id='commentBlock'><strong>"+data.comList[i].user_id+"</strong>&nbsp;&nbsp;";
+										
+										//단, 댓글 작성자인 경우 ==> 수정, 삭제 버튼 노출
+										if(data.comList[i].user_id == data.session_user_id){
+											comHtml += "<input type='button' value='수정' id='goComModify' onclick='goComModifyBtn("+data.comList[i].comNum_ajax+")'>&nbsp;";
+											comHtml += "<input type='button' value='삭제' id='goComDelete' onclick='goComDeleteBtn("+data.comList[i].comNum_ajax+")'>&nbsp;";
+											comHtml += "<span>"+data.comList[i].comDate_ajax+"</span>";
+										}//if
+										
+										comHtml += "<div class='commentDetail'><font color='red'>[비밀글]</font>&nbsp;"+data.comList[i].comContents_ajax+"</div><br><hr><br></div></div>";
+										
+										
+									//그 이외의 사람 ==> 비밀글 내용 볼 수 없음	
+									}else{
+										comHtml += "<div id='commentBlock'><strong>"+data.comList[i].user_id+"</strong>";
+										comHtml += "&nbsp;&nbsp;"+data.comList[i].comDate_ajax+"<br>";
+										comHtml += "<font color='red'>비밀댓글 입니다.</font><br><br><hr><br></div>";
+									}//if - 접속자 누구? 확인용
+								}//if - 비밀글 설정? 확인용
+							}//for
+							
+						//댓글이 없는 경우
+						} else {
+							comHtml += "<div id='commentBlock'><br><h4>&nbsp;&nbsp;댓글이 없습니다.</h4><br></div>";
+						}//if - 댓글 유무 확인용
+						$("#comment_history").html(comHtml);
+						
 						
 
 						
@@ -92,7 +145,223 @@
 				$(document).on('click', '#goDelete');   //삭제하기
 				$(document).on('click', '#goModify');   //수정하기
 				$(document).on('click', '#goReply');   	//답변하기
+				
+				$(document).on('click', '#goComModify');    //댓글 수정하기
+				$(document).on('click', '#goComDelete');    //댓글 삭제하기
 			});
+			
+			
+			
+			
+			//댓글 수정 View
+			function goComModifyBtn(comNum_ajax){
+				
+				$.post(
+					'/ajax/comModify',
+					{
+						"comNum_ajax":comNum_ajax,
+						"postNum_ajax":$("#postNum_ajax").val()
+					},
+					function(data){
+						
+						console.log(data);
+						var add_div = "#comNum_"+comNum_ajax;
+						
+						html = "";
+						html += "<strong>"+data.ajaxCommentDto.user_id+"</strong>&nbsp;&nbsp;";
+						html += "<input type='button' value='취소' id='cancelComModify' onclick=''>&nbsp;";
+						html += "<span>"+data.ajaxCommentDto.comDate_ajax+"</span>";
+						html += "<div class='commentDetail'><input type='text' value='"+data.ajaxCommentDto.comContents_ajax+"'>&nbsp;";
+						html += "<input type='button' value='저장' id='doComModifySave' onclick=''></div>";
+						/* html += "<input type='checkbox' name='comSecret_ajax' value='y' ";
+						if(data.ajaxCommentDto.reSecret_ajax == 'y'){
+							html += "checked>>&nbsp;";
+						}
+						html += "<label>비밀글 설정</label><br><hr><br>"; */
+						
+						$(add_div).html(html);
+						
+					},
+					'json'
+				);//ajax
+				
+			}//goComModifyBtn()
+			
+			
+			
+			
+			
+			
+			
+			
+			//댓글 삭제하기
+			function goComDeleteBtn(comNum_ajax){
+				
+				if(confirm("정말 삭제하시겠습니까?")){
+					
+					$.post(
+						'/ajax/doComDelete',
+						{
+							"comNum_ajax":comNum_ajax,
+							"postNum_ajax":$("#postNum_ajax").val()
+						},
+						function(data){
+							
+							var msg = data.msg;
+							alert(msg);
+							
+							//댓글 히스토리
+							comHtml = "";
+							
+							//댓글이 있는 경우
+							if(data.result == false){
+								
+								for(var i=0; i<data.comList.length; i++){
+									
+									//비밀글 설정 N
+									if(data.comList[i].comSecret_ajax == 'n'){
+										comHtml += "<div id='comNum_"+data.comList[i].comNum_ajax+"'><div id='commentBlock'><strong>"+data.comList[i].user_id+"</strong>&nbsp;&nbsp;";
+										if(data.comList[i].user_id == data.session_user_id){
+											comHtml += "<input type='button' value='수정' id='goComModify' onclick='goComModifyBtn("+data.comList[i].comNum_ajax+")'>&nbsp;";
+											comHtml += "<input type='button' value='삭제' id='goComDelete' onclick='goComDeleteBtn("+data.comList[i].comNum_ajax+")'>&nbsp;";
+										}
+										comHtml += "<span>"+data.comList[i].comDate_ajax+"</span>";
+										comHtml += "<div class='commentDetail'>"+data.comList[i].comContents_ajax+"</div><br><hr><br></div></div>";
+										
+									//비밀글 설정 Y	
+									}else {
+										
+										//원글작성자 or 댓글 작성자인 경우 ==> 비밀글 내용 보여주기
+										if(data.comList[i].user_id == data.session_user_id || data.ajaxDto.user_id == data.session_user_id){
+											comHtml += "<div id='comNum_"+data.comList[i].comNum_ajax+"'><div id='commentBlock'><strong>"+data.comList[i].user_id+"</strong>&nbsp;&nbsp;";
+											
+											//단, 댓글 작성자인 경우 ==> 수정, 삭제 버튼 노출
+											if(data.comList[i].user_id == data.session_user_id){
+												comHtml += "<input type='button' value='수정' id='goComModify' onclick='goComModifyBtn("+data.comList[i].comNum_ajax+")'>&nbsp;";
+												comHtml += "<input type='button' value='삭제' id='goComDelete' onclick='goComDeleteBtn("+data.comList[i].comNum_ajax+")'>&nbsp;";
+												comHtml += "<span>"+data.comList[i].comDate_ajax+"</span>";
+											}//if
+											
+											comHtml += "<div class='commentDetail'><font color='red'>[비밀글]</font>&nbsp;"+data.comList[i].comContents_ajax+"</div><br><hr><br></div></div>";
+											
+											
+										//그 이외의 사람 ==> 비밀글 내용 볼 수 없음	
+										}else{
+											comHtml += "<div id='commentBlock'><strong>"+data.comList[i].user_id+"</strong>";
+											comHtml += "&nbsp;&nbsp;"+data.comList[i].comDate_ajax+"<br>";
+											comHtml += "<font color='red'>비밀댓글 입니다.</font><br><br><hr><br></div>";
+										}//if - 접속자 누구? 확인용
+									}//if - 비밀글 설정? 확인용
+								}//for
+								
+							//댓글이 없는 경우
+							} else {
+								comHtml += "<div id='commentBlock'><br><h4>&nbsp;&nbsp;댓글이 없습니다.</h4><br></div>";
+							}//if - 댓글 유무 확인용
+							$("#comment_history").html(comHtml);
+							
+							
+						},
+						'json'
+					);//ajax
+						
+				}else {
+					return false;
+				}
+				
+				
+				
+				
+				
+				
+			}//goComDeleteBtn()
+			
+			
+			
+			
+			
+			
+			//댓글 쓰기 - DB 저장하기
+			function doComWrite(){
+				
+								
+				//내용 공백 확인
+				if(!$("#comContents_ajax").val()){
+					alert("내용을 입력해 주세요!");
+					$("#comContents_ajax").focus();
+					return false;
+				}
+				
+				$.post(
+					'/ajax/doComWrite',
+					{
+						"user_id":$("#user_id").val(),
+						"postNum_ajax":$("#postNum_ajax").val(),
+						"comSecret_ajax":$("input:checkbox[name='comSecret_ajax']:checked").val(),
+						"comContents_ajax":$("#comContents_ajax").val(),
+						"page":$("#page").val()
+					},
+					function(data){
+						
+						
+						//댓글 히스토리
+						comHtml = "";
+						
+						//댓글이 있는 경우
+						if(data.result == false){
+							
+							for(var i=0; i<data.comList.length; i++){
+								
+								//비밀글 설정 N
+								if(data.comList[i].comSecret_ajax == 'n'){
+									comHtml += "<div id='comNum_"+data.comList[i].comNum_ajax+"'><div id='commentBlock'><strong>"+data.comList[i].user_id+"</strong>&nbsp;&nbsp;";
+									if(data.comList[i].user_id == data.session_user_id){
+										comHtml += "<input type='button' value='수정' id='goComModify' onclick='goComModifyBtn("+data.comList[i].comNum_ajax+")'>&nbsp;";
+										comHtml += "<input type='button' value='삭제' id='goComDelete' onclick='goComDeleteBtn("+data.comList[i].comNum_ajax+")'>&nbsp;";
+									}
+									comHtml += "<span>"+data.comList[i].comDate_ajax+"</span>";
+									comHtml += "<div class='commentDetail'>"+data.comList[i].comContents_ajax+"</div><br><hr><br></div></div>";
+									
+								//비밀글 설정 Y	
+								}else {
+									
+									//원글작성자 or 댓글 작성자인 경우 ==> 비밀글 내용 보여주기
+									if(data.comList[i].user_id == data.session_user_id || data.ajaxDto.user_id == data.session_user_id){
+										comHtml += "<div id='comNum_"+data.comList[i].comNum_ajax+"'><div id='commentBlock'><strong>"+data.comList[i].user_id+"</strong>&nbsp;&nbsp;";
+										
+										//단, 댓글 작성자인 경우 ==> 수정, 삭제 버튼 노출
+										if(data.comList[i].user_id == data.session_user_id){
+											comHtml += "<input type='button' value='수정' id='goComModify' onclick='goComModifyBtn("+data.comList[i].comNum_ajax+")'>&nbsp;";
+											comHtml += "<input type='button' value='삭제' id='goComDelete' onclick='goComDeleteBtn("+data.comList[i].comNum_ajax+")'>&nbsp;";
+											comHtml += "<span>"+data.comList[i].comDate_ajax+"</span>";
+										}//if
+										
+										comHtml += "<div class='commentDetail'><font color='red'>[비밀글]</font>&nbsp;"+data.comList[i].comContents_ajax+"</div><br><hr><br></div></div>";
+										
+										
+									//그 이외의 사람 ==> 비밀글 내용 볼 수 없음	
+									}else{
+										comHtml += "<div id='commentBlock'><strong>"+data.comList[i].user_id+"</strong>";
+										comHtml += "&nbsp;&nbsp;"+data.comList[i].comDate_ajax+"<br>";
+										comHtml += "<font color='red'>비밀댓글 입니다.</font><br><br><hr><br></div>";
+									}//if - 접속자 누구? 확인용
+								}//if - 비밀글 설정? 확인용
+							}//for
+							
+						//댓글이 없는 경우
+						} else {
+							comHtml += "<div id='commentBlock'><br><h4>&nbsp;&nbsp;댓글이 없습니다.</h4><br></div>";
+						}//if - 댓글 유무 확인용
+						$("#comContents_ajax").val("");
+						$("#comment_history").html(comHtml);
+						
+						
+					},
+					'json'
+				);//ajax
+				
+			}//doComWrite()
+			
 			
 			
 			
@@ -106,7 +375,7 @@
 				
 				//수정된 후 목록 버튼 클릭 시 리스트 새로고침
 				$.post(
-					'/ajax/DoList',
+					'/ajax/doList',
 					{
 						"page":page
 					},
@@ -117,16 +386,6 @@
 						$(opener.document).find("input[id='maxPage']").val(data.maxPage);
 						$(opener.document).find("span[id='dataCnt']").text(data.listCount);
 						
-						/* //list 데이터
-						html = "";
-						for(i=0; i<data.list.length; i++){
-							html += "<tr><td><span class='table-notice'>"+data.list[i].postNum_ajax;
-							html += "</span></td><td class='table-title'><a href='javascript:void(0)'";
-							html += " onclick='showView("+data.list[i].postNum_ajax+", "+data.page+")' id='showView'>"+data.list[i].title_ajax;
-							html += "</a></td><td>"+data.list[i].user_id+"</td>";
-							html += "<td>"+data.list[i].date_ajax+"</td><td>"+data.list[i].hitNum_ajax+"</td></tr>";
-							$(opener.document).find("tbody[id='tbody']").html(html);
-						}//for */
 						
 						//list 데이터
 						html = "";
@@ -141,9 +400,16 @@
 							}
 							
 							html += "<a href='javascript:void(0)'";
-							html += " onclick='showView("+data.list[i].postNum_ajax+", "+data.page+")' id='showView'>"+data.list[i].title_ajax;
-							html += "</a></td><td>"+data.list[i].user_id+"</td>";
+							html += " onclick='showView("+data.list[i].postNum_ajax+", "+data.page+")' id='showView'>"+data.list[i].title_ajax+"</a>";
+							
+							
+							if(data.list[i].comCnt != 0){
+								html += "&nbsp;<font color='red'><strong>["+data.list[i].comCnt+"]</strong></font>";	
+							}
+							
+							html += "</td><td>"+data.list[i].user_id+"</td>";
 							html += "<td>"+data.list[i].date_ajax+"</td><td>"+data.list[i].hitNum_ajax+"</td></tr>";
+							
 							$(opener.document).find("tbody[id='tbody']").html(html);
 						}//for
 						
@@ -185,15 +451,6 @@
 							$("#page").val(data.page);
 							$(opener.document).find("#dataCnt").text(data.listCount);
 							
-							/* html = "";
-							for(i=0; i<data.list.length; i++){
-								html += "<tr><td><span class='table-notice'>"+data.list[i].postNum_ajax;
-								html += "</span></td><td class='table-title'><a href='javascript:void(0)'";
-								html += " onclick='showView("+data.list[i].postNum_ajax+", "+data.page+")' id='showView'>"+data.list[i].title_ajax;
-								html += "</a></td><td>"+data.list[i].user_id+"</td>";
-								html += "<td>"+data.list[i].date_ajax+"</td><td>"+data.list[i].hitNum_ajax+"</td></tr>";
-								$(opener.document).find("tbody[id='tbody']").html(html);
-							}//for */
 							
 							//list 데이터
 							html = "";
@@ -208,9 +465,16 @@
 								}
 								
 								html += "<a href='javascript:void(0)'";
-								html += " onclick='showView("+data.list[i].postNum_ajax+", "+data.page+")' id='showView'>"+data.list[i].title_ajax;
-								html += "</a></td><td>"+data.list[i].user_id+"</td>";
+								html += " onclick='showView("+data.list[i].postNum_ajax+", "+data.page+")' id='showView'>"+data.list[i].title_ajax+"</a>";
+								
+								
+								if(data.list[i].comCnt != 0){
+									html += "&nbsp;<font color='red'><strong>["+data.list[i].comCnt+"]</strong></font>";	
+								}
+								
+								html += "</td><td>"+data.list[i].user_id+"</td>";
 								html += "<td>"+data.list[i].date_ajax+"</td><td>"+data.list[i].hitNum_ajax+"</td></tr>";
+								
 								$(opener.document).find("tbody[id='tbody']").html(html);
 							}//for
 							
@@ -294,8 +558,30 @@
 				
 				<!-- 댓글 영역 -->
 				<div id="comment_area">
-					<div id="comment_write">댓글 쓰기 영역</div>
-					<div id="comment_history">댓글 히스토리</div>
+					<div id="comment_history">
+
+						<!-- 댓글 리스트가 들어가는 자리 -->
+						
+						
+						
+					</div>
+					
+					
+					<!-- <div id="comment_history">
+							<strong>아이디</strong>&nbsp;&nbsp;
+								
+								<input type="button" value="취소" id="cancelComModify" onclick="">&nbsp;
+								<span class="replySaveDate_no">댓글작성일</span>
+							<div class="replyDetail">
+								<input type="text" value="댓글 내용">
+								<input type="button" value="저장" id="goComModifySave" onclick="">
+							</div>
+							<br>
+							<hr>
+							<br>
+					</div> -->
+					
+					
 					<div id="comment_pageNum">
 						<ul class="page_num">
 							<li class="first"></li>
@@ -305,6 +591,20 @@
 							<li class="last"></li>
 						</ul>
 					</div>
+					<div id="comment_write">
+						
+							<strong>${session_user_name}(${session_user_id})</strong>&nbsp;&nbsp;
+							<input type="hidden" name="user_id" id="user_id" value="${session_user_id}">
+							<input type="checkbox" name="comSecret_ajax" id="comSecret_ajax" value="y"> &nbsp;<span>비밀글 설정</span>
+							<br>
+							<input type="text" name="comContents_ajax" id="comContents_ajax">
+							<input type="button" id="comAjaxBtn" value="등록" onclick="doComWrite()">
+						
+						
+						
+						
+					</div>
+					
 				</div>
 				
 				<!-- 버튼 모음 -->

@@ -18,8 +18,11 @@
 				          groupNum_ajax,
 				          indentNum_ajax,
 				          stepNum_ajax,
-				          hitNum_ajax
-					FROM hu_ajax
+				          hitNum_ajax,
+				          (SELECT count(*)
+                  		   FROM hu_ajax_comment c
+                  		   WHERE b.postNum_ajax = c.postNum_ajax) AS comCnt
+					FROM hu_ajax b
 					
 		<if test='search != null and category.equals("total")'>
 					WHERE title_ajax LIKE '%'||#{search}||'%' 
@@ -173,7 +176,76 @@
 
   
   
+  
+  
+  <!-- 댓글 리스트 불러오기 -->
+  <select id="selectCommentListAll" resultType="com.example.demo.dto.AjaxCommentDto">
+		SELECT comNum_ajax,
+			   user_id, 
+			   comContents_ajax, 
+			   comDate_ajax, 
+			   comGroupNum_ajax, 
+			   comIndentNum_ajax, 
+			   comStepNum_ajax, 
+			   comSecret_ajax, 
+			   postNum_ajax 
+		FROM hu_ajax_comment
+		WHERE postNum_ajax=#{postNum_ajax}
+		ORDER BY comDate_ajax ASC
+  </select>
+  
+  
+  <!-- 댓글 쓰기 -->
+  <insert id="insertComWrite">
+		INSERT INTO hu_ajax_comment(comNum_ajax,
+									user_id,
+									comContents_ajax,
+									comDate_ajax,
+									comGroupNum_ajax,
+									comIndentNum_ajax,
+									comStepNum_ajax,
+									comSecret_ajax,
+									postNum_ajax) 
+						VALUES      (comment_seq.nextval, 
+									#{user_id}, 
+									#{comContents_ajax},
+									sysdate, 
+									comment_seq.currval, 
+									0, 
+									0, 
+									#{comSecret_ajax}, 
+									#{postNum_ajax})
+  </insert>
+  
 
+
+  <!-- 댓글 삭제 -->
+  <delete id="deleteComment">
+		DELETE FROM hu_ajax_comment
+		WHERE comNum_ajax=#{comNum_ajax}
+  </delete>
+
+
+
+
+  <!-- 댓글 수정 View -->
+  <select id="selectComment" resultType="com.example.demo.dto.AjaxCommentDto">
+		SELECT comNum_ajax,
+			   user_id, 
+			   comContents_ajax, 
+			   comDate_ajax, 
+			   comGroupNum_ajax, 
+			   comIndentNum_ajax, 
+			   comStepNum_ajax, 
+			   comSecret_ajax, 
+			   postNum_ajax 
+		FROM hu_ajax_comment
+		WHERE postNum_ajax=#{postNum_ajax} 
+			  AND comNum_ajax=#{comNum_ajax}
+  
+  </select>
+  
+  
 
 
   
