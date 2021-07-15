@@ -180,7 +180,7 @@
   
   <!-- 댓글 리스트 불러오기 -->
   <select id="selectCommentListAll" resultType="com.example.demo.dto.AjaxCommentDto">
-<!-- 		SELECT comNum_ajax,
+		SELECT comNum_ajax,
 			   user_id, 
 			   comContents_ajax, 
 			   comDate_ajax, 
@@ -191,40 +191,8 @@
 			   postNum_ajax 
 		FROM hu_ajax_comment
 		WHERE postNum_ajax=#{postNum_ajax}
-		ORDER BY comDate_ajax ASC -->
-		
-		SELECT * 
-		FROM (SELECT ROWNUM rnum,
-					 a.* 
-			  FROM (SELECT comNum_ajax,
-						   user_id, 
-						   comContents_ajax, 
-						   comDate_ajax, 
-						   comGroupNum_ajax,
-						   comIndentNum_ajax, 
-						   comStepNum_ajax, 
-						   comSecret_ajax, 
-						   postNum_ajax 
-					FROM hu_ajax_comment
-					WHERE postNum_ajax=#{postNum_ajax}
-					ORDER BY comDate_ajax ASC) a)
-		WHERE rnum >=#{comStartRow} and rnum &lt;= #{comEndRow}
-		
-		
-		
+		ORDER BY comDate_ajax ASC
   </select>
-  
-  
-  <!-- 페이지 넘버링 - 댓글 개수 확인 -->
-  <select id="comListCount" resultType="int">
-		SELECT Count(*) 
-		FROM hu_ajax_comment
-		WHERE postNum_ajax=#{postNum_ajax}
-  </select>
-  
-  
-  
-  
   
   
   <!-- 댓글 쓰기 -->
@@ -260,35 +228,6 @@
 
 
 
-  <!-- 댓글 수정 View -->
-  <select id="selectComment" resultType="com.example.demo.dto.AjaxCommentDto">
-		SELECT comNum_ajax,
-			   user_id, 
-			   comContents_ajax, 
-			   comDate_ajax, 
-			   comGroupNum_ajax, 
-			   comIndentNum_ajax, 
-			   comStepNum_ajax, 
-			   comSecret_ajax, 
-			   postNum_ajax 
-		FROM hu_ajax_comment
-		WHERE postNum_ajax=#{postNum_ajax} 
-			  AND comNum_ajax=#{comNum_ajax}
-  
-  </select>
-  
-  
-  
-  
-  
-  <!-- 댓글 수정 - 저장하기 -->
-  <update id="updateComModify">
-		UPDATE hu_ajax_comment 
-		SET comContents_ajax=#{comContents_ajax}, 
-			comSecret_ajax=#{comSecret_ajax}
-		WHERE postNum_ajax=#{postNum_ajax} 
-			  AND comNum_ajax=#{comNum_ajax}
-  </update>
   
   
 

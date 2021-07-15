@@ -22,7 +22,7 @@
   			function listView(){
   				
   				$.post(
-  					"/ajax/doList",		
+  					"/ajax/DoList",		
   					{
   						"page":$("#page").val(),
   						"category":$("#category").val(),
@@ -34,8 +34,39 @@
 						$("#maxPage").val(data.maxPage);
 						$("#dataCnt").text(data.listCount);
 						
-						//list + 페이지 출력
-						list(data);
+						
+						//list 데이터
+						html = "";
+						for(var i=0; i<data.list.length; i++){
+							html += "<tr><td><span class='table-notice'>"+data.list[i].postNum_ajax;
+							html += "</span></td><td class='table-title'>";
+							
+							if(data.list[i].indentNum_ajax != 0){
+								for(var j=0; j<data.list[i].indentNum_ajax; j++){
+									html += "└─&nbsp;Re:&nbsp;";
+								}
+							}
+							
+							html += "<a href='javascript:void(0)'";
+							html += " onclick='showView("+data.list[i].postNum_ajax+", "+data.page+")' id='showView'>"+data.list[i].title_ajax+"</a>";
+							
+							
+							if(data.list[i].comCnt != 0){
+								html += "&nbsp;<font color='red'><strong>["+data.list[i].comCnt+"]</strong></font>";	
+							}
+							
+							html += "</td><td>"+data.list[i].user_id+"</td>";
+							html += "<td>"+data.list[i].date_ajax+"</td><td>"+data.list[i].hitNum_ajax+"</td></tr>";
+							$("#tbody").html(html);
+						}//for
+						
+						
+						//페이지 넘버링
+						htmlPg = "";
+						for(var i=data.startPage; i<=data.endPage; i++){
+							htmlPg += "<li class='num' onclick='movePgBtn("+i+")'><div>"+i+"</div></li>";
+						}
+						$("#pageNum").html(htmlPg);
   					},
   					"json"
   				);//ajax
@@ -54,7 +85,7 @@
 		  	function movePgBtn(page){
 		  		
 				$.post(
-					"/ajax/doList",
+					"/ajax/movePg",
 					{
 						"page":page,
 						"category":$("#category").val(),
@@ -64,13 +95,42 @@
 						$("#page").val(data.page);
 						$("#maxPage").val(data.maxPage);
 						
-						//list + 페이지 출력
-						list(data);
+						//list 데이터
+						html = "";
+						for(var i=0; i<data.list.length; i++){
+							html += "<tr><td><span class='table-notice'>"+data.list[i].postNum_ajax;
+							html += "</span></td><td class='table-title'>";
+							
+							if(data.list[i].indentNum_ajax != 0){
+								for(var j=0; j<data.list[i].indentNum_ajax; j++){
+									html += "└─&nbsp;Re:&nbsp;";
+								}
+							}
+							
+							html += "<a href='javascript:void(0)'";
+							html += " onclick='showView("+data.list[i].postNum_ajax+", "+data.page+")' id='showView'>"+data.list[i].title_ajax+"</a>";
+							
+							
+							if(data.list[i].comCnt != 0){
+								html += "&nbsp;<font color='red'><strong>["+data.list[i].comCnt+"]</strong></font>";	
+							}
+							
+							html += "</td><td>"+data.list[i].user_id+"</td>";
+							html += "<td>"+data.list[i].date_ajax+"</td><td>"+data.list[i].hitNum_ajax+"</td></tr>";
+							$("#tbody").html(html);
+						}//for
+						
+						//페이지 넘버링
+						htmlPg = "";
+						for(var i=data.startPage; i<=data.endPage; i++){
+							htmlPg += "<li class='num' onclick='movePgBtn("+i+")'><div>"+i+"</div></li>";
+						}
+						$("#pageNum").html(htmlPg);
+						
 					},
 					"json"
 				);//ajax
 		  	}//movePgBtn()
-		  	
 		  	
 		  	
 		  	//페이지 이동 - 이전페이지
@@ -83,7 +143,7 @@
 		  		
 		  		
 		  		$.post(
-		  			"/ajax/doList",
+		  			"/ajax/movePg",
 		  			{
 		  				"page":prePage,
 		  				"category":$("#category").val(),
@@ -93,13 +153,42 @@
 						$("#page").val(data.page);
 						$("#maxPage").val(data.maxPage);
 						
-						//list + 페이지 출력
-						list(data);
+						//list 데이터
+						html = "";
+						for(var i=0; i<data.list.length; i++){
+							html += "<tr><td><span class='table-notice'>"+data.list[i].postNum_ajax;
+							html += "</span></td><td class='table-title'>";
+							
+							if(data.list[i].indentNum_ajax != 0){
+								for(var j=0; j<data.list[i].indentNum_ajax; j++){
+									html += "└─&nbsp;Re:&nbsp;";
+								}
+							}
+							
+							html += "<a href='javascript:void(0)'";
+							html += " onclick='showView("+data.list[i].postNum_ajax+", "+data.page+")' id='showView'>"+data.list[i].title_ajax+"</a>";
+							
+							
+							if(data.list[i].comCnt != 0){
+								html += "&nbsp;<font color='red'><strong>["+data.list[i].comCnt+"]</strong></font>";	
+							}
+							
+							html += "</td><td>"+data.list[i].user_id+"</td>";
+							html += "<td>"+data.list[i].date_ajax+"</td><td>"+data.list[i].hitNum_ajax+"</td></tr>";
+							$("#tbody").html(html);
+						}//for
+						
+						//페이지 넘버링
+						htmlPg = "";
+						for(var i=data.startPage; i<=data.endPage; i++){
+							htmlPg += "<li class='num' onclick='movePgBtn("+i+")'><div>"+i+"</div></li>";
+						}
+						$("#pageNum").html(htmlPg);
+						
 		  			},
 		  			"json"
 		  		);//ajax
 		  	}//prePgBtn
-		  	
 		  	
 		  	
 		  	//페이지 이동 - 다음페이지
@@ -112,7 +201,7 @@
 		  		var nextPage = parseInt(page)+1;
 		  		
 		  		$.post(
-		  			"/ajax/doList",
+		  			"/ajax/movePg",
 		  			{
 		  				"page":nextPage,
 		  				"category":$("#category").val(),
@@ -122,13 +211,43 @@
 						$("#page").val(data.page);
 						$("#maxPage").val(data.maxPage);
 						
-						//list + 페이지 출력
-						list(data);
+						
+						//list 데이터
+						html = "";
+						for(var i=0; i<data.list.length; i++){
+							html += "<tr><td><span class='table-notice'>"+data.list[i].postNum_ajax;
+							html += "</span></td><td class='table-title'>";
+							
+							if(data.list[i].indentNum_ajax != 0){
+								for(var j=0; j<data.list[i].indentNum_ajax; j++){
+									html += "└─&nbsp;Re:&nbsp;";
+								}
+							}
+							
+							html += "<a href='javascript:void(0)'";
+							html += " onclick='showView("+data.list[i].postNum_ajax+", "+data.page+")' id='showView'>"+data.list[i].title_ajax+"</a>";
+							
+							
+							if(data.list[i].comCnt != 0){
+								html += "&nbsp;<font color='red'><strong>["+data.list[i].comCnt+"]</strong></font>";	
+							}
+							
+							html += "</td><td>"+data.list[i].user_id+"</td>";
+							html += "<td>"+data.list[i].date_ajax+"</td><td>"+data.list[i].hitNum_ajax+"</td></tr>";
+							$("#tbody").html(html);
+						}//for
+						
+						//페이지 넘버링
+						htmlPg = "";
+						for(var i=data.startPage; i<=data.endPage; i++){
+							htmlPg += "<li class='num' onclick='movePgBtn("+i+")'><div>"+i+"</div></li>";
+						}
+						$("#pageNum").html(htmlPg);
+						
 		  			},
 		  			"json"
 		  		);//ajax
 		  	}//nextPgBtn
-		  	
 		  	
 		  	
 		  	//글쓰기 View
@@ -169,7 +288,7 @@
   				var search = $("#search").val();
   				
   				$.post(
-  					'/ajax/doList',
+  					'/ajax/DoList',
   					{
   						"category":category,
   						"search":search,
@@ -180,64 +299,49 @@
   						$("#page").val(data.page);
 						$("#maxPage").val(data.maxPage);
 						$("#dataCnt").text(data.listCount);
-
-						//list + 페이지 출력
-						list(data);
+						console.log(data);
+						
+						
+						
+						//list 데이터
+						html = "";
+						for(var i=0; i<data.list.length; i++){
+							html += "<tr><td><span class='table-notice'>"+data.list[i].postNum_ajax;
+							html += "</span></td><td class='table-title'>";
+							
+							if(data.list[i].indentNum_ajax != 0){
+								for(var j=0; j<data.list[i].indentNum_ajax; j++){
+									html += "└─&nbsp;Re:&nbsp;";
+								}
+							}
+							
+							html += "<a href='javascript:void(0)'";
+							html += " onclick='showView("+data.list[i].postNum_ajax+", "+data.page+")' id='showView'>"+data.list[i].title_ajax+"</a>";
+							
+							
+							if(data.list[i].comCnt != 0){
+								html += "&nbsp;<font color='red'><strong>["+data.list[i].comCnt+"]</strong></font>";	
+							}
+							
+							html += "</td><td>"+data.list[i].user_id+"</td>";
+							html += "<td>"+data.list[i].date_ajax+"</td><td>"+data.list[i].hitNum_ajax+"</td></tr>";
+							$("#tbody").html(html);
+						}//for
+						
+						
+						//페이지 넘버링
+						htmlPg = "";
+						for(var i=data.startPage; i<=data.endPage; i++){
+							htmlPg += "<li class='num' onclick='movePgBtn("+i+")'><div>"+i+"</div></li>";
+						}//for
+						$("#pageNum").html(htmlPg);
+						
   					},
   					'json'
   				);//ajax
-  			}//doSearch()
-  			
-  			
-  			
-  			
-  			//list + 페이지 - 출력 함수
-  			function list(data){
   				
-  				//검색결과 있을 떄
-				if(data.result == false){
-					//list 데이터
-					html = "";
-					for(var i=0; i<data.list.length; i++){
-						html += "<tr><td><span class='table-notice'>"+data.list[i].postNum_ajax;
-						html += "</span></td><td class='table-title'>";
-						
-						if(data.list[i].indentNum_ajax != 0){
-							for(var j=0; j<data.list[i].indentNum_ajax; j++){
-								html += "└─&nbsp;Re:&nbsp;";
-							}
-						}
-						
-						html += "<a href='javascript:void(0)'";
-						html += " onclick='showView("+data.list[i].postNum_ajax+", "+data.page+")' id='showView'>"+data.list[i].title_ajax+"</a>";
-						
-						
-						if(data.list[i].comCnt != 0){
-							html += "&nbsp;<font color='red'><strong>["+data.list[i].comCnt+"]</strong></font>";	
-						}
-						
-						html += "</td><td>"+data.list[i].user_id+"</td>";
-						html += "<td>"+data.list[i].date_ajax+"</td><td>"+data.list[i].hitNum_ajax+"</td></tr>";
-						$("#tbody").html(html);
-					}//for
-					
-					
-					//페이지 넘버링
-					htmlPg = "";
-					for(var i=data.startPage; i<=data.endPage; i++){
-						htmlPg += "<li class='num' onclick='movePgBtn("+i+")'><div>"+i+"</div></li>";
-					}//for
-					$("#pageNum_area").show();
-					$("#pageNum").html(htmlPg);
-				}else if(data.result == true){
-					html = "";
-					html += "<tr><td colspan='5' id='noSearchResult'>'"+data.search+"'에 대한 검색결과가 없습니다.</td></tr>";
-					$("#tbody").html(html);
-					$("#pageNum_area").hide();
-				}//if
-  			}//list();
-  			
-  			
+  				
+  			}//doSearch()
   			
   			
   		</script>

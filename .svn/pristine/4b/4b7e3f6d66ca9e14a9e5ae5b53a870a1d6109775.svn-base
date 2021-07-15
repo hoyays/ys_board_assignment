@@ -38,6 +38,7 @@
 				//msg가 modify이면 수정
 				if(msg == 'modify'){
 					
+					
 					$.post(
 						'/ajax/modify',
 						{
@@ -57,6 +58,7 @@
 				}else if(msg == 'reply'){
 					
 					$("#title_area").html("<h1>답변하기</h1>");
+					
 					//답변하기의 경우 
 					//원글의 postNum_ajax, groupNum_ajax, indentNum_ajax, stepNum_ajax 필요함
 					var postNum_ajax = $(opener.document).find("input[id='postNum_ajax']").val();
@@ -68,7 +70,9 @@
 					$("#indentNum_ajax").val(indentNum_ajax);
 					$("#stepNum_ajax").val(stepNum_ajax);
 					$("#msg").val("reply");
+					
 				}//if
+				
 			}//writeView()
 		
 		
@@ -119,6 +123,7 @@
 							$("#page").val(data.page);
 							$(opener.document).find("#dataCnt").text(data.listCount);
 							
+							
 							//list 데이터
 							html = "";
 							for(var i=0; i<data.list.length; i++){
@@ -146,9 +151,11 @@
 							}//for
 							
 							self.close();
+							
 						},
 						'json'
 					);//ajax
+					
 					
 				//수정 내용 저장
 				}else if(msg == 'modify'){
@@ -174,43 +181,49 @@
 							$(opener.document).find("tbody[id='tbody']").html(html);
 							
 							self.close();
+							
 						},
 						'json'
 					);//ajax
+					
 					
 				//답변 내용 저장
 				}else if(msg == 'reply'){
 					
 					$.post(
-						'/ajax/doReply',
-						{
-							"user_id":$("#user_id").val(),
-							"title_ajax":$("#title_ajax").val(),
-							"contents_ajax":contents_ajax,
-							"postNum_ajax":$("#postNum_ajax").val(),
-							"groupNum_ajax":$("#groupNum_ajax").val(),
-							"indentNum_ajax":$("#indentNum_ajax").val(),
-							"stepNum_ajax":$("#stepNum_ajax").val(),
-							"page":page
-						},
-						function(data){
-							
-							var msg = data.msg;
-							alert(msg);
-							
-							html = "";
-							html += "<tr><th colspan='3'>제목</th></tr><tr>";
-							html += "<td colspan='3'><strong>"+data.ajaxDto.title_ajax+"</strong></td></tr>";
-							html += "<tr><td>"+data.ajaxDto.user_id+"</td><td>조회수</td>";
-							html += "<td>"+data.ajaxDto.hitNum_ajax+"</td></tr><tr>";
-							html += "<td colspan='3' class='article'>"+data.ajaxDto.contents_ajax+"</td></tr>";
-							$(opener.document).find("tbody[id='tbody']").html(html);
-							
-							self.close();
-						},
-						'json'
-					);//ajax
+							'/ajax/doReply',
+							{
+								"user_id":$("#user_id").val(),
+								"title_ajax":$("#title_ajax").val(),
+								"contents_ajax":contents_ajax,
+								"postNum_ajax":$("#postNum_ajax").val(),
+								"groupNum_ajax":$("#groupNum_ajax").val(),
+								"indentNum_ajax":$("#indentNum_ajax").val(),
+								"stepNum_ajax":$("#stepNum_ajax").val(),
+								"page":page
+							},
+							function(data){
+								
+								var msg = data.msg;
+								alert(msg);
+								
+								html = "";
+								html += "<tr><th colspan='3'>제목</th></tr><tr>";
+								html += "<td colspan='3'><strong>"+data.ajaxDto.title_ajax+"</strong></td></tr>";
+								html += "<tr><td>"+data.ajaxDto.user_id+"</td><td>조회수</td>";
+								html += "<td>"+data.ajaxDto.hitNum_ajax+"</td></tr><tr>";
+								html += "<td colspan='3' class='article'>"+data.ajaxDto.contents_ajax+"</td></tr>";
+								$(opener.document).find("tbody[id='tbody']").html(html);
+								
+								self.close();
+								
+							},
+							'json'
+						);//ajax
+					
+					
 				}//if
+				
 			}//doWrite()
 		
 			

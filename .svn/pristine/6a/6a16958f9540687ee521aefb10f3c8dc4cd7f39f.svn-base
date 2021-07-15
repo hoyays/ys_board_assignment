@@ -126,7 +126,7 @@ th, td{
 }
 
 #comment_pageNum{
-	width: 450px;
+	width: 300px;
 	height: 50px;
 	margin: 0 auto;
 	margin-top: 15px;
@@ -144,11 +144,6 @@ th, td{
 	float: left;
 	margin-left: 20px;
 	border: 1px solid grey;
-}
-.page_num li:hover{
-	cursor: pointer;
-	font-weight: 900;
-	color: #5EC75E;
 }
 .first{
 	background: url("../../img/paging_first.png") no-repeat;
