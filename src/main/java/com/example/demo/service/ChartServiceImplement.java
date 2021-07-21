@@ -22,10 +22,18 @@ public class ChartServiceImplement implements ChartService {
 	
 	//일별 데이터
 	@Override
-	public List<ChartDto> dataPerDay(String weekago) {
+	public List<ChartDto> dataPerDay(String weekAgo) {
 		
-		list = chartMapper.selectDataPerDay(weekago);
+		list = chartMapper.selectDataPerDay(weekAgo);
+		return list;
+	}
+
+
+	//월별 데이터
+	@Override
+	public List<ChartDto> dataPerMonth(String sixMonthAgo) {
 		
+		list = chartMapper.selectDataPerMonth(sixMonthAgo);
 		return list;
 	}
 

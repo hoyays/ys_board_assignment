@@ -11,9 +11,23 @@
 		SELECT To_char(boardDate, 'YYYYMMDD') AS resultDate,
 		       Count(*) 					  AS boardCnt
 		FROM hu_board
-		WHERE To_char(boardDate, 'YYYYMMDD') >= #{weekago} 
+		WHERE To_char(boardDate, 'YYYYMMDD') >= #{weekAgo} 
 			  AND To_char(boardDate, 'YYYYMMDD') &lt;= To_char(SYSDATE, 'YYYYMMDD')
 		GROUP BY To_char(boardDate, 'YYYYMMDD')
+		ORDER BY resultDate DESC
+		
+</select>
+
+
+
+<!-- 월별 데이터 -->
+<select id="selectDataPerMonth" resultType="com.example.demo.dto.ChartDto">
+		SELECT To_char(boardDate, 'YYYYMM') AS resultDate,
+		       Count(*) 					AS boardCnt
+		FROM hu_board
+		WHERE To_char(boardDate, 'YYYYMM') >= #{sixMonthAgo} 
+			  AND To_char(boardDate, 'YYYYMM') &lt;= To_char(SYSDATE, 'YYYYMM')
+		GROUP BY To_char(boardDate, 'YYYYMM')
 		ORDER BY resultDate DESC
 </select>
 

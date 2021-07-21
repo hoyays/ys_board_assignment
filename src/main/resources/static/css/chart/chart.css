@@ -37,6 +37,11 @@
 	font-size: 22px;
 	margin-right: 20px;
 }
+#selectedMonth{
+	font-weight: 800;
+	font-size: 22px;
+	margin-right: 20px;
+}
 #searchBtn button{
 	width: 60px;
 	height: 45px;
