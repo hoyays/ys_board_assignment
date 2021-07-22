@@ -17,7 +17,7 @@
   				let today = new Date();
   				$("#today").val(dateToString(today));
   				
-  				//default - 일별 데이터
+  				//default
   				dateChk();   //날짜
   				perDay($("#today").val());    //일자별 챠트
   			});//jQuery
@@ -71,9 +71,9 @@
 				}
 				$("#saveNow").val(saveNow);
 				$("#selectedDate").text(now);
+  				
+  				
   			}//dateChk()
-  			
-  			
   			
   			
   			//월 선택 이동
@@ -97,6 +97,8 @@
 					saveNowMonth = dateToString(pre);      //20210701형태(String)로 변경
 					nowMonth = dateToPrint(saveNowMonth).substr(0,7);
 					
+					$("canvas").remove("#myChartPerMonth");
+					$("#chart_area").html("<canvas id='myChartPerMonth'></canvas>");
 					perMonth(saveNowMonth);
 					
 				}else if(choice == 'next' && $("#today").val() != $("#saveNowMonth").val()){
@@ -111,6 +113,8 @@
  					saveNowMonth = dateToString(next);      //20210701형태(String)로 변경
  					nowMonth = dateToPrint(saveNowMonth).substr(0,7);
  					
+ 					$("canvas").remove("#myChartPerMonth");
+					$("#chart_area").html("<canvas id='myChartPerMonth'></canvas>");
 					perMonth(saveNowMonth);
  					
 				}else if(choice == 'next' && $("#today").val() == $("#saveNowMonth").val()){
@@ -124,6 +128,9 @@
   				
   				
   			}//monthChk()
+  			
+  			
+  			
   			
   			
   			
@@ -172,7 +179,6 @@
   			
   			
   			
-  			
   			//차트 그리기 함수
   			function mkChart(ctx, type, labels, title, data){
   					
@@ -215,6 +221,8 @@
 				        }
 				    }//options
 				});//new Chart()
+				
+				
   			}//mkChart()
   			
   			
@@ -292,8 +300,7 @@
   				}
   				monthChk();
   				
-  				$("canvas").remove("#myChartPerMonth");
-				$("#chart_area").html("<canvas id='myChartPerMonth'></canvas>");
+  				
   				
   				//버튼 클릭 시 배경색 변경
   				$(".perDay").removeClass("checked");
@@ -345,13 +352,24 @@
   					},
   					'json'
   				);//ajax
+  				
+  				
+  				
+  				
   			}//perMonth()
+  			
+  			
+  			
+  			
+  			
+  			
+  			
   		</script>
 	</head>
 	<body>
-	<input type="hidden" id="saveNow" name="saveNow">
-	<input type="hidden" id="saveNowMonth" name="saveNowMonth">
-	<input type="hidden" id="today" name="today">
+	<input type="text" id="saveNow" name="saveNow">
+	<input type="text" id="saveNowMonth" name="saveNowMonth">
+	<input type="text" id="today" name="today">
 	
 		<c:choose>
 			<c:when test="${session_flag eq 'success'}">

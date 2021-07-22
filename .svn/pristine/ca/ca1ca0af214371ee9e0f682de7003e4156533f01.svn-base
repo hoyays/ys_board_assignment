@@ -1,0 +1,70 @@
+@charset "UTF-8";
+*{
+	margin: 0;
+	padding: 0;
+}
+#board_outline{
+	width: 1300px;
+	height: 800px;
+	margin: 0 auto;
+	/* border: 1px solid black; */
+}
+#title_area{
+	width: 1300px;
+	margin: 0 auto;
+	/* border: 1px solid black; */
+}
+#title_area h2{
+	margin-top: 60px;
+	text-align: center;
+}
+#contents_area{
+	width: 1000px;
+	margin: 0 auto;
+	margin-top: 40px;
+	/* border: 1px solid red; */
+}
+#search_area{
+	box-sizing: border-box;
+	margin-bottom: 30px;
+	padding-top: 5px;
+	padding-left: 400px;
+	height: 60px;
+	border: 2px solid red;
+}
+#selectedDate{
+	font-weight: 800;
+	font-size: 22px;
+	margin-right: 20px;
+}
+#selectedMonth{
+	font-weight: 800;
+	font-size: 22px;
+	margin-right: 20px;
+}
+#searchBtn button{
+	width: 60px;
+	height: 45px;
+	margin-right: 10px;
+	font-weight: 800;
+	font-size: 17px;
+}
+.perDay.checked{
+	color: white;
+	background-color: #5EC75E;
+	border: 0;
+}
+.perMonth.checked{
+	color: white;
+	background-color: #5EC75E;
+	border: 0;
+}
+#chart_area{
+	width: 1000px;
+	height: 520px;
+	margin: 0 auto;
+	margin-top: 40px;
+	/* border: 1px solid red; */
+}
+
+
