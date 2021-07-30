@@ -79,7 +79,7 @@
 			<artifactId>OracleDriver</artifactId>
 			<version>11.2.0.3</version>
 			<scope>system</scope>
-			<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/ojdbc6_g.jar</systemPath>
+			<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/ojdbc7.jar</systemPath>
 		</dependency>
 		
 		<!-- 엑셀 다운로드 -->
