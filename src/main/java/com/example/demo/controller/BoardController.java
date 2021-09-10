@@ -34,6 +34,9 @@ import com.example.demo.dto.ReplyDto;
 import com.example.demo.service.BoardListExcelExporter;
 import com.example.demo.service.BoardService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Controller
 public class BoardController {
 	
@@ -142,10 +145,9 @@ public class BoardController {
 	//글쓰기 처리 - DB 저장
 	@RequestMapping("/writeChk")
 	public String writeChk(BoardDto boardDto, 
-			@RequestPart MultipartFile file,
-			HttpServletRequest request,
-							Model model) {
+			@RequestPart MultipartFile file, HttpServletRequest request, Model model) {
 		
+		//log.info(">>>> write 저장, 내용 확인 : "+boardDto.getContents());
 		boardService.boardWrite(boardDto, file, request);
 		model.addAttribute("map", map);
 		return "redirect:/board/list";

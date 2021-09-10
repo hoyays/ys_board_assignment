@@ -29,6 +29,7 @@
 						return false;
 					}
 					
+					//alert(CKEDITOR.instances.contents.getData());
 					document.writeForm.submit();
 				});
 				
