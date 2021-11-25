@@ -150,7 +150,7 @@
  					date = "0"+date;
  				}
   				
-  				var result = year+month+date;
+  				var result = year+""+month+""+date;
   				
   				return result;
   			}//dateToString()
