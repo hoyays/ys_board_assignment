@@ -11,15 +11,17 @@ resources.location=C:/project/upload/
 #외부경로 매핑 - 리눅스(저장경로에 맞게 수정해서 주석풀기)
 #resources.linuxLocation = /var/webapps/upload/
 
-#datasource(oracle) - Local
-#spring.datasource.driver-class-name=oracle.jdbc.driver.OracleDriver
-#spring.datasource.url=jdbc:oracle:thin:@localhost:1521/xe
-#spring.datasource.username=ora_user1
-#spring.datasource.password=1111
-
-#datasource(oracle) - Huation DB
+#datasource(oracle) - 휴에이션 DB
 spring.datasource.driver-class-name=oracle.jdbc.driver.OracleDriver
 spring.datasource.url=jdbc:oracle:thin:@192.168.2.82:1521/orcl
 spring.datasource.username=new_ysan
 spring.datasource.password=dksdbstjs1!
+
+#datasource(oracle) - 로컬PC DB
+#spring.datasource.driver-class-name=oracle.jdbc.driver.OracleDriver
+#spring.datasource.url=jdbc:oracle:thin:@localhost:1521/xe
+#spring.datasource.username=system
+#spring.datasource.password=1234
+
+
 
