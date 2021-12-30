@@ -46,12 +46,12 @@ public class BoardServiceImplement implements BoardService {
 	BoardPageNumbering pageNumbering;
 	
 	//윈도우용
-//	@Value(value = "${resources.location}")
-//	private String fileUrl;
+	@Value(value = "${resources.location}")
+	private String fileUrl;
 	
 	//리눅스용
-	@Value(value = "${resources.linuxLocation}")
-	private String fileUrl;
+//	@Value(value = "${resources.linuxLocation}")
+//	private String fileUrl;
 	
 	
 	//변수선언

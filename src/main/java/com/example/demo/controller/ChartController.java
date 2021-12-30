@@ -1,8 +1,8 @@
 package com.example.demo.controller;
 
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,27 +37,26 @@ public class ChartController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		List<ChartDto> list = new ArrayList<ChartDto>();
 		
-		//매겨변수로 넘어온, 선택된 날짜 ==> Date로 세팅
+		//매겨변수로 넘어온, 선택된 날짜 세팅
 		int year = Integer.parseInt(selectedDate.substring(0,4));
 		int month = Integer.parseInt(selectedDate.substring(4,6));
 		int day = Integer.parseInt(selectedDate.substring(6,8));
+		LocalDate basicDate = LocalDate.of(year, month, day);
+		String paramDate = basicDate.format(DateTimeFormatter.BASIC_ISO_DATE);   //YYYYMMDD
+
 		
-		Calendar cal = Calendar.getInstance();
-		cal.set(year, month-1, day);  //매겨변수로 넘어온, 선택된 날짜로 세팅
-		
-		//세팅된 날짜 기준, 일주일전 날짜 확인
-		SimpleDateFormat sdf = new SimpleDateFormat("YYYYMMdd");
-		cal.add(Calendar.DAY_OF_MONTH, -6);
-		String weekAgo = sdf.format(cal.getTime());
 		
 		//검색대상 일주일 날짜, 배열저장
 		String [] week = new String[7];  //검색대상 일주일 날짜 저장
-		cal.set(year, month-1, day);
-		week[0] = sdf.format(cal.getTime());
-		for(int i=1; i<=6; i++) {
-			cal.add(Calendar.DAY_OF_MONTH, -1);
-			week[i] = sdf.format(cal.getTime());
+		week[0] = paramDate;
+		for(int i=1; i<7; i++) {
+			week[i] = basicDate.minusDays(i).format(DateTimeFormatter.BASIC_ISO_DATE);
 		}
+		
+
+		//세팅된 날짜 기준, 일주일전 날짜 확인
+		String weekAgo = week[6];
+		
 		
 		//7일간 데이터 가져오기
 		list = chartService.dataPerDay(weekAgo);
@@ -111,38 +110,25 @@ public class ChartController {
 		int year = Integer.parseInt(selectedDate.substring(0,4));
 		int month = Integer.parseInt(selectedDate.substring(4,6));
 		int day = Integer.parseInt(selectedDate.substring(6,8));
+		LocalDate basicDate = LocalDate.of(year, month, day);
+		String paramDate = basicDate.format(DateTimeFormatter.BASIC_ISO_DATE).substring(0, 6);   
 		
-		Calendar cal = Calendar.getInstance();
-		cal.set(year, month-1, day);  //매겨변수로 넘어온, 선택된 날짜로 세팅
+		
+		
+		//검색대상 일주일 날짜, 배열저장
+		String [] sixMonth = new String[7];  //검색대상 6개월 저장
+		sixMonth[0] = paramDate;
+		for(int i=1; i<7; i++) {
+			sixMonth[i] = basicDate.minusMonths(i).format(DateTimeFormatter.BASIC_ISO_DATE).substring(0, 6);
+		}
+		
 		
 		//세팅된 날짜 기준, 7개월 전 날짜 확인
-		SimpleDateFormat sdf = new SimpleDateFormat("YYYYMMdd");
-		cal.add(Calendar.MONTH, -6);
-		String sixMonthAgo = sdf.format(cal.getTime()).substring(0,6);
-//		System.out.println("쿼리에 사용할 날짜 : "+sixMonthAgo);
-		
-		//검색대상 6개월, 배열저장
-		String [] sixMonth = new String[7];  //검색대상 6개월 저장
-		cal.set(year, month-1, day);
-		sixMonth[0] = sdf.format(cal.getTime()).substring(0, 6);
-		
-		for(int i=1; i<=6; i++) {
-			cal.add(Calendar.MONTH, -1);
-			String calArr = "";
-			if(cal.get(Calendar.MONTH) == 11) {  //12월인 경우
-//				System.out.println("년도 : "+cal.get(Calendar.YEAR));
-//				System.out.println("월 : "+cal.get(Calendar.MONTH));
-				calArr = cal.get(Calendar.YEAR)+""+(cal.get(Calendar.MONTH)+1)+"";
-			}else {
-				calArr = sdf.format(cal.getTime()).substring(0, 6);
-			}
-			sixMonth[i] = calArr;
-		}
+		String sixMonthAgo = sixMonth[6];
 		
 		
 		//6개월간 데이터 가져오기
 		list = chartService.dataPerMonth(sixMonthAgo);
-		
 		
 		
 		//0 데이터 포함한 경우 확인

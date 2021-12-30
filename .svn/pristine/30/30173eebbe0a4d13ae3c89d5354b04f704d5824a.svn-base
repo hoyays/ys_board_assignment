@@ -249,7 +249,7 @@
   						selectedDate:reqDate
   					},
   					function(data){
-  						console.log(data);
+  						//console.log(data);
   						
   						//ctx
   						var ctx = $("#myChartPerDay");
