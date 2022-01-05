@@ -5,39 +5,38 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>일반게시판 - 게시물 등록현황</title>
-  		<link rel="stylesheet" href="../css/chart/chart.css">
-  		<script src="http://code.jquery.com/jquery-latest.min.js"></script>
-  		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  		<script type="text/javascript">
-  			
-  			$(document).ready(function(){
-  				
-  				//오늘날짜 저장
-  				let today = new Date();
-  				$("#today").val(dateToString(today));
-  				
-  				//default - 일별 데이터
-  				dateChk();   //날짜
-  				perDay($("#today").val());    //일자별 챠트
-  			});//jQuery
-  		
-  			
-  			
-  			//날짜 선택 이동
-  			function dateChk(choice){
-  				
+		<title>AJAX게시판 - 게시물 등록현황</title>
+		<link rel="stylesheet" href="../css/chart/chartAjax.css">
+		<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+		<script type="text/javascript">
+		
+			$(document).ready(function(){
+				
+				//오늘날짜 저장
+				let today = new Date();
+				$("#today").val(dateToString(today));
+				
+				//default - 일별 데이터
+				dateChk();    //날짜
+				perDay($("#today").val());    //일자별 챠트
+			});//jQuery
+		
+			
+		
+			
+			//날짜 선택 이동
+			function dateChk(choice){
+				
   				var now;  //화면 출력용
   				var saveNow;  //저장용
-  				
-  				
-				if(choice == null || choice== ""){
-					saveNow = dateToString();   //20210701형태(String)로 변경(저장용)
-					now = dateToPrint(saveNow); //2021.07.01 형태로 변경(출력용)
+				
+				if(choice == null || choice == ""){
+					saveNow = dateToString();     //20220104형태(String)로 변경(저장용)
+					now = dateToPrint(saveNow);   //2022.01.04. 형태로 변경(출력용)
 					
-	  				
 				}else if(choice == 'pre'){
-
+					
 					var str = $("#saveNow").val();
 					var y = str.substr(0,4);
 					var m = str.substr(4,2);
@@ -50,6 +49,7 @@
 					perDay(saveNow);
 					
 				}else if(choice == 'next' && $("#today").val() != $("#saveNow").val()){
+				
 					var str = $("#saveNow").val();
  					var y = str.substr(0,4);
  					var m = str.substr(4,2);
@@ -62,27 +62,27 @@
  					now = dateToPrint(saveNow);
  					
 					perDay(saveNow);
- 					
+					
 				}else if(choice == 'next' && $("#today").val() == $("#saveNow").val()){
 					alert("오늘 이후의 날짜로는 이동이 불가합니다.");
 					saveNow = dateToString(new Date());
 					now = dateToPrint(saveNow);
-					
 				}
+  				
 				$("#saveNow").val(saveNow);
 				$("#selectedDate").text(now);
-  			}//dateChk()
-  			
-  			
-  			
-  			
-  			//월 선택 이동
-  			function monthChk(choice){
-  				
-  				var nowMonth;  //화면 출력용
+				
+			}//dateChk()
+			
+			
+			
+ 			//월 선택 이동
+			function monthChk(choice){
+				
+				var nowMonth;  //화면 출력용
   				var saveNowMonth;  //저장용
-  				
-				if(choice == null || choice== ""){
+				
+				if(choice == null || choice == ""){
 					saveNowMonth = dateToString();   //202107형태(String)로 변경(저장용)
 					nowMonth = dateToPrint(saveNowMonth).substr(0,8); //2021.07. 형태로 변경(출력용)
 					
@@ -112,54 +112,55 @@
  					nowMonth = dateToPrint(saveNowMonth).substr(0,7);
  					
 					perMonth(saveNowMonth);
- 					
+					
 				}else if(choice == 'next' && $("#today").val() == $("#saveNowMonth").val()){
 					alert("오늘 이후의 날짜로는 이동이 불가합니다.");
 					saveNowMonth = dateToString(new Date());
 					nowMonth = dateToPrint(saveNowMonth).substr(0,7);
-					
 				}
+  				
 				$("#saveNowMonth").val(saveNowMonth);
 				$("#selectedMonth").text(nowMonth);
   				
-  				
-  			}//monthChk()
-  			
-  			
-  			
- 			
-  			//날짜 Date() ==> 20210701형태(String)로 변경
-  			function dateToString(reqData){
-  				
-  				let changeResult;
-  				
-  				if(reqData == null || reqData == ""){
-  					changeResult = new Date();
-  				}else {
-  					changeResult = new Date(reqData);
-  				}//if
-  				
-  				
-  				let year = changeResult.getFullYear(); // 년도
- 				let month = changeResult.getMonth() + 1;  // 월
- 				if(month < 10){
- 					month = "0"+month;
- 				}
- 				let date = changeResult.getDate();  // 날짜
- 				if(date < 10){
- 					date = "0"+date;
- 				}
-  				
-  				var result = year+""+month+""+date;
-  				
-  				return result;
-  			}//dateToString()
-  			
-  			
-  			
-  			//20210701 ==> 2021.07.01. 형태로 변경(출력용)  
-  			//단, reqData  ==> 20210701 형태로 들어와야 함
-  			function dateToPrint(reqData){
+				
+			}//monthChk()
+			
+			
+		
+		
+			//날짜 Date() ==> 20220104형태(String)로 변경
+			function dateToString(reqData){
+				
+				let changeResult;
+					
+				if(reqData == null || reqData == ""){
+					changeResult = new Date();
+				}else {
+					changeResult = new Date(reqData);
+				}//if
+				
+				
+				let year = changeResult.getFullYear(); // 년도
+				let month = changeResult.getMonth() + 1;  // 월
+				if(month < 10){
+					month = "0"+month;
+				}
+				let date = changeResult.getDate();  // 날짜
+				if(date < 10){
+					date = "0"+date;
+				}
+				
+				var result = year+""+month+""+date;
+				
+				return result;
+			}//dateToString()
+		
+		
+		
+		
+			//20220104 ==> 2022.01.04. 형태로 변경(화면 출력용)
+			//단, 매개변수 reqData ==> 20220104 형태로 들어와야 함
+			function dateToPrint(reqData){
   				
   				var y = reqData.substr(0,4);
 				var m = reqData.substr(4,2);
@@ -172,16 +173,15 @@
   			
   			
   			
-  			
   			//차트 그리기 함수
   			function mkChart(ctx, type, labels, title, data){
-  					
-				var myChart = new Chart(ctx, {
-				    type: type,
-				    data: {
-				        labels: labels,
-				        datasets: [{
-				            label: title,
+  				
+  				var myChart = new Chart(ctx, {
+  					type: type,
+  					data: {
+  						labels: labels,
+  						datasets: [{
+  							label: title,
 				            data: data,
 				            backgroundColor: [
 				                'rgba(255, 99, 132, 0.2)',
@@ -202,10 +202,10 @@
 				                'rgb(201, 203, 207)'
 				            ],
 				            borderWidth: 1
-				        }]//datasets
-				    },//data
-				    options: {
-				        maintainAspectRatio: false, // default value. false일 경우 포함된 div의 크기에 맞춰서 그려짐.
+  						}]//datasets
+  					},//data
+  					options: {
+  						maintainAspectRatio: false, // default value. false일 경우 포함된 div의 크기에 맞춰서 그려짐.
 				        scales: {
 				            yAxes: [{
 				                ticks: {
@@ -213,21 +213,21 @@
 				                }
 				            }]
 				        }
-				    }//options
-				});//new Chart()
+  					}//options
+  				});//new Chart()
   			}//mkChart()
+		
+
   			
   			
-  			
-  			
-  			
-  			//일별 확인
-  			function perDay(reqDate){
+		
+		
+			//일별 확인
+			function perDay(reqDate){
   				
 				$("#chart_area").html("<canvas id='myChartPerDay'></canvas>");
   				
-  				
-  				//버튼 클릭 시 배경색 변경
+				//버튼 클릭 시 배경색 변경
   				$(".perDay").addClass("checked");
   				$(".perMonth").removeClass("checked");
   				
@@ -246,53 +246,53 @@
   					'/chart/doChartPerDay',
   					{
   						selectedDate:reqDate,
-  						kind:"general"
+  						kind:"ajax"
   					},
   					function(data){
-  						console.log(data);
-  						
-  						//ctx
-  						var ctx = $("#myChartPerDay");
-  						
-  						//type
-  						var type = 'bar';
-  						
-  						//data - labels
-  						var labels = [];
-  						for(var i=6; i>=0; i--){
+						console.log(data);
+						
+						//ctx
+						var ctx = $("#myChartPerDay");
+						
+						//type
+						var type = "bar";
+						
+						//data - labels
+						var labels = [];
+						for(var i=6; i>=0; i--){
   							labels.push(data.list[i].resultDate.substr(4,2)+"월 "+data.list[i].resultDate.substr(6,2)+"일");
   						}
-  						//console.log(labels);
-  						
-  						//data - datasets - title
+						
+						
+						//data - datasets - title
   						var title = '일별 게시물 등록 현황';
+  						
   						
   						//data - datasets - data
   						var dataAll = [];
   						for(var i=6; i>=0; i--){
   							dataAll.push(data.list[i].boardCnt);
   						}
-  						//console.log(dataAll);
   						
   						mkChart(ctx, type, labels, title, dataAll);
   						
   					},
   					'json'
-  				);//ajax
-  				
+  				); //ajax
   			}//perDay()
   			
   			
   			
+  			
   			//월별 확인
-  			function perMonth(reqDate){
+   			function perMonth(reqDate){
   				
   				if(reqDate == null || reqDate == ""){
   					reqDate = $("#today").val();
   				}
   				monthChk();
   				
-				$("#chart_area").html("<canvas id='myChartPerMonth'></canvas>");
+  				$("#chart_area").html("<canvas id='myChartPerMonth'></canvas>");
   				
   				//버튼 클릭 시 배경색 변경
   				$(".perDay").removeClass("checked");
@@ -311,11 +311,11 @@
   					'/chart/doChartPerMonth',
   					{
   						selectedDate:reqDate,
-  						kind:"general"
+  						kind:"ajax"
   					},
   					function(dataMonth){
-  						
-  						console.log(dataMonth);
+
+						console.log(dataMonth);
   						
   						//ctx
   						var ctx = $("#myChartPerMonth");
@@ -342,17 +342,21 @@
   						console.log(dataAll);
   						
   						mkChart(ctx, type, labels, title, dataAll);
-  						
-  					},
-  					'json'
+  					},	
+  					'json'	
   				);//ajax
   			}//perMonth()
-  		</script>
+		
+		
+		
+		</script>
 	</head>
 	<body>
 	<input type="hidden" id="saveNow" name="saveNow"> <!-- 일별 확인용 : 1일 단위로 변경 -->
 	<input type="hidden" id="saveNowMonth" name="saveNowMonth">  <!-- 월별 확인용 : 30일 단위로 변경 -->
 	<input type="hidden" id="today" name="today">
+	
+	
 	
 		<c:choose>
 			<c:when test="${session_flag eq 'success'}">
@@ -362,7 +366,7 @@
 				</div>
 				<div id="board_outline">
 					<div id="title_area">
-						<h2><font color="red">일반</font> 게시판 - 게시물 등록 현황</h2> 
+						<h2><font color="blue">AJAX</font> 게시판 - 게시물 등록 현황</h2> 
 					</div>
 					<div id="contents_area">
 						<div id="search_area">
@@ -384,14 +388,14 @@
 									<a href="javascript:void(0)" onclick="monthChk('next')">>></a>
 								</span>&nbsp;&nbsp;&nbsp;
 							</span>
-							
+					
 							<span id="searchBtn">
 								<button class="perDay" onclick="perDay(saveNow.value)">일별</button>
 								<button class="perMonth" onclick="perMonth(saveNowMonth.value)">월별</button>
 							</span>
 						</div>
 						<div id="chart_area">
-						
+							
 							<!-- Chart가 그려지는 영역 -->
 							
 						</div>
@@ -410,6 +414,5 @@
 				</script>
 			</c:otherwise>
 		</c:choose>
-		
 	</body>
 </html>

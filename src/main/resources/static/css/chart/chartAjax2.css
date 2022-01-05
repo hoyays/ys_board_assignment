@@ -7,7 +7,7 @@
 	width: 1300px;
 	height: 900px;
 	margin: 0 auto;
-	/* border: 1px solid black; */
+	border: 1px solid black;
 }
 #title_area{
 	width: 1300px;
@@ -22,7 +22,7 @@
 	width: 1000px;
 	margin: 0 auto;
 	margin-top: 40px;
-	/* border: 1px solid red; */
+	/* border: 1px solid blue; */
 }
 #search_area{
 	box-sizing: border-box;
@@ -32,32 +32,10 @@
 	height: 60px;
 	border: 2px solid red;
 }
-#selectedDate{
-	font-weight: 800;
-	font-size: 22px;
-	margin-right: 20px;
-}
 #selectedMonth{
 	font-weight: 800;
 	font-size: 22px;
 	margin-right: 20px;
-}
-#searchBtn button{
-	width: 60px;
-	height: 45px;
-	margin-right: 10px;
-	font-weight: 800;
-	font-size: 17px;
-}
-.perDay.checked{
-	color: white;
-	background-color: #5EC75E;
-	border: 0;
-}
-.perMonth.checked{
-	color: white;
-	background-color: #5EC75E;
-	border: 0;
 }
 #chart_area{
 	width: 1000px;
@@ -81,4 +59,6 @@
 	font-size: 16px;
 	text-align: center;
 }
-
+a:hover{
+	cursor: pointer;
+}
